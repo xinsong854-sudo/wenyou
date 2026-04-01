@@ -375,6 +375,14 @@ const easterEggRoles = {
     '鲛人': '别名·鲛人',
     '鸿': '编辑记者',
     '黎守': '调查局成员',
+    'ending_survivor': {
+        bg: 'bg-ending',
+        ending: true,
+        endingType: 'normal',
+        endingTitle: '幸存者',
+        endingText: '你成功活了下来。\n\n这个世界依然危险，但至少你现在知道了规则。\n\n也许有一天，你会找到彻底解决的办法。\n但今天，你只是一个幸存者。'
+    }
+
 };
 
 const scenes = {
@@ -2362,6 +2370,14 @@ const scenes = {
             { text: '放弃', next: 'ending_hide' }
         ]
     }
+    'ending_survivor': {
+        bg: 'bg-ending',
+        ending: true,
+        endingType: 'normal',
+        endingTitle: '幸存者',
+        endingText: '你成功活了下来。\n\n这个世界依然危险，但至少你现在知道了规则。\n\n也许有一天，你会找到彻底解决的办法。\n但今天，你只是一个幸存者。'
+    }
+
 };
 
 
