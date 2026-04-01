@@ -2702,28 +2702,17 @@ function doInsCheck() {
     
     const ins = playerCharacter.stats.INS;
     const skill = playerCharacter.skills.侦查 || 0;
-    const dc = 50; // 普通难度
+    const dc = 50;
     const roll = Math.floor(Math.random() * 100) + 1;
     
-    let result, resultText;
-    if (roll <= 5) {
-        result = '大成功';
-        resultText = '🎉 大成功！你发现了惊人的细节！';
-    } else if (roll >= 96) {
-        result = '大失败';
-        resultText = '💀 大失败！你看得太入迷，被张明发现了！';
-    } else if (roll <= ins + skill - dc + 50) {
-        result = '成功';
-        resultText = '✅ 成功！你注意到张明的异常行为。';
-    } else {
-        result = '失败';
-        resultText = '❌ 失败！你没看出什么异常。';
-    }
+    let result;
+    if (roll <= 5) result = '大成功';
+    else if (roll >= 96) result = '大失败';
+    else if (roll <= ins + skill - dc + 50) result = '成功';
+    else result = '失败';
     
-    // 保存检定结果供场景使用
     window.lastCheckResult = result;
     
-    // 显示检定 UI
     showCheckResult({
         attribute: 'INS',
         attrValue: ins,
@@ -2734,6 +2723,36 @@ function doInsCheck() {
         targetValue: ins + skill,
         result: result,
         description: '仔细观察张明的行为'
+    });
+}
+
+// SAN 检定函数
+function doSanCheck() {
+    if (!playerCharacter) return;
+    
+    const san = playerCharacter.stats.SAN;
+    const skill = playerCharacter.skills.心理学 || 0;
+    const dc = 60; // 困难难度
+    const roll = Math.floor(Math.random() * 100) + 1;
+    
+    let result;
+    if (roll <= 5) result = '大成功';
+    else if (roll >= 96) result = '大失败';
+    else if (roll <= san + skill - dc + 50) result = '成功';
+    else result = '失败';
+    
+    window.lastCheckResult = result;
+    
+    showCheckResult({
+        attribute: 'SAN',
+        attrValue: san,
+        skill: '心理学',
+        skillValue: skill,
+        dc: dc,
+        roll: roll,
+        targetValue: san + skill,
+        result: result,
+        description: '保持冷静面对恐惧'
     });
 }
 
