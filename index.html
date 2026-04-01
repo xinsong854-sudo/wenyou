@@ -2333,7 +2333,6 @@ function loadScene(sceneId) {
     
     // 显示第一句对话
     showDialogue(scene.dialogues[0]);
-    dialogueIndex = 0;
     
     // 如果只有一句对话且有选项，直接显示
     if (scene.dialogues.length === 1 && scene.choices) {
@@ -2350,7 +2349,6 @@ function showDialogue(dialogue) {
     
     speakerEl.textContent = dialogue.speaker || '';
     currentText = dialogue.text || '';
-    dialogueIndex = 0;
     
     // 简单显示，不打字机效果
     textEl.innerHTML = currentText.replace(/\n/g, '<br>');
