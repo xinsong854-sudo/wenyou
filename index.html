@@ -285,78 +285,129 @@ const scenes = {
     'read_note': {
         bg: 'bg-office',
         dialogues: [
-            { speaker: '纸条', text: '【生存指南】\n1. 伪人会模仿人类，但眨眼频率异常\n2. 他们说话会重复关键词\n3. 不要单独去旧医院\n4. 猎人组织联系方式：138****\n5. 如果发现被跟踪，去人多的地方' },
-            { speaker: '我', text: '（我的手开始发抖...这上面写的，和张明的行为完全吻合！）' },
+            { speaker: '', text: '【纸条内容】' },
+            { speaker: '？？？', text: '如果你看到了这张纸条，说明你已经开始怀疑了。' },
+            { speaker: '？？？', text: '【生存指南】' },
+            { speaker: '？？？', text: '1. 伪人会模仿人类，但眨眼频率异常（太规律）' },
+            { speaker: '？？？', text: '2. 他们说话会重复关键词或最后一句话' },
+            { speaker: '？？？', text: '3. 不要单独去旧医院（那是他们的大本营）' },
+            { speaker: '？？？', text: '4. 猎人组织联系方式：138****（加密部分）' },
+            { speaker: '？？？', text: '5. 如果发现被跟踪，去人多的地方（他们不敢在人群前动手）' },
+            { speaker: '？？？', text: '6. 不要报警（警察不会相信你）' },
+            { speaker: '？？？', text: '祝你好运。——烛灯' },
+            { speaker: '我', text: '（我的心脏开始狂跳...这上面写的，和张明的行为完全吻合！）' },
+            { speaker: '我', text: '（伪人...？这怎么可能...）' },
             { speaker: '张明', text: '林晓，你在看什么？' },
-            { speaker: '我', text: '（他什么时候过来的？！）' }
+            { speaker: '我', text: '（他的声音突然从身后传来！我浑身一僵...）' },
+            { speaker: '我', text: '（他什么时候过来的？！我完全没听到脚步声...）' },
+            { speaker: '我', text: '（我缓缓转身，看到张明正盯着我手里的纸条...）' },
+            { speaker: '我', text: '（他的表情...没有任何变化。但那眼神，冷得像冰。）' }
         ],
         choices: [
-            { text: '说是工作文件', next: 'fake_work' },
-            { text: '直接询问纸条', next: 'ask_note' }
+            { text: '「说是工作文件」——假装镇定', next: 'fake_work' },
+            { text: '「直接询问纸条」——正面质问', next: 'ask_note' }
         ]
     },
     'fake_work': {
         bg: 'bg-office',
         dialogues: [
-            { speaker: '我', text: '哦，是下周的会议资料。' },
-            { speaker: '张明', text: '（他盯着我看了一会儿）...早点回去休息吧。' },
-            { speaker: '我', text: '（他的眼神...完全没有人类的情感。）' },
+            { speaker: '我', text: '（我强装镇定，把手里的纸条揉成一团...）' },
+            { speaker: '我', text: '「哦，是下周的会议资料。我正准备整理一下。」' },
+            { speaker: '张明', text: '（他盯着我看了一会儿...一秒，两秒，三秒...）' },
+            { speaker: '张明', text: '「...早点回去休息吧。你脸色不太好。」' },
+            { speaker: '我', text: '（他的语气很平常，但那眼神...完全没有人类的情感。）' },
+            { speaker: '我', text: '（他在相信我，还是在试探我？）' },
+            { speaker: '我', text: '（我不敢多想，抓起包就往门口走...）' },
+            { speaker: '我', text: '（我能感觉到他的目光一直跟随着我，直到我走出办公室...）' },
+            { speaker: '我', text: '（电梯门关闭的那一刻，我才敢大口呼吸...）' },
             { speaker: '我', text: '（我必须离开这里，现在！）' }
         ],
         choices: [
-            { text: '立刻离开公司', next: 'leave_company' },
-            { text: '先回家拿东西', next: 'go_home_first' }
+            { text: '🏃 立刻离开公司，去人多的地方', next: 'leave_company' },
+            { text: '🏠 先回家拿东西，再想办法', next: 'go_home_first' }
         ]
     },
     'ask_note': {
         bg: 'bg-office',
         dialogues: [
-            { speaker: '我', text: '这张纸条...是你的？' },
-            { speaker: '张明', text: '（他笑了，但笑容不达眼底）你发现了啊。' },
-            { speaker: '张明', text: '那就没办法了。跟我们走一趟吧。' },
-            { speaker: '我', text: '（他说"我们"？办公室里还有其他人？！）' }
+            { speaker: '我', text: '（我握紧手里的纸条，心跳如雷...）' },
+            { speaker: '我', text: '「这张纸条...是你的？上面说的伪人...就是你吧？」' },
+            { speaker: '张明', text: '（他沉默了几秒...然后笑了。）' },
+            { speaker: '张明', text: '「...你发现了啊。」' },
+            { speaker: '我', text: '（他的笑容...完全不像人类。那只是嘴角的肌肉在动，眼睛里没有任何笑意...）' },
+            { speaker: '张明', text: '「本来想再观察你一段时间的。可惜。」' },
+            { speaker: '张明', text: '（他朝门口看了一眼...）' },
+            { speaker: '张明', text: '「那就没办法了。跟我们走一趟吧。」' },
+            { speaker: '我', text: '（他说"我们"...？！）' },
+            { speaker: '我', text: '（我下意识地看向门口...另一个同事正站在那里，面无表情地看着我...）' },
+            { speaker: '我', text: '（糟了...办公室里还有其他人？！）' }
         ],
         choices: [
-            { text: '逃跑！', next: 'escape_office' },
-            { text: '跟他们走', next: 'go_with_them' }
+            { text: '🏃「逃跑！」——趁现在！', next: 'escape_office' },
+            { text: '😰「跟他们走」——先保命...', next: 'go_with_them' }
         ]
     },
     'leave_company': {
         bg: 'bg-street',
         dialogues: [
-            { speaker: '我', text: '（我快步走出公司，不敢回头。）' },
-            { speaker: '我', text: '（街上人来人往，但...这些人里有多少是伪人？）' },
+            { speaker: '', text: '【第 1 天 · 周一 · 18:32】' },
+            { speaker: '我', text: '（我快步走出公司大楼，不敢回头。）' },
+            { speaker: '我', text: '（晚高峰的街道上人来人往，车水马龙。本该是让人安心的景象...）' },
+            { speaker: '我', text: '（但现在，我看着每一个路人，心里都在想：他也是吗？她也是吗？）' },
+            { speaker: '我', text: '（张明那冰冷的眼神在我脑海里挥之不去...）' },
             { speaker: '？？？', text: '你也发现了，对吧？' },
-            { speaker: '我', text: '（一个戴帽子的神秘人出现在我旁边。）' }
+            { speaker: '我', text: '（一个声音突然从耳边传来！我猛地一颤...）' },
+            { speaker: '我', text: '（转头看去，一个戴着黑色帽子的男人不知何时站在了我旁边。）' },
+            { speaker: '我', text: '（他看起来三十多岁，穿着深色风衣，帽檐压得很低...）' },
+            { speaker: '我', text: '（最奇怪的是...我完全没注意到他什么时候靠近的。）' }
         ],
         choices: [
-            { text: '警惕地后退', next: 'be_careful' },
-            { text: '询问他是谁', next: 'ask_who' }
+            { text: '「警惕地后退」——保持距离', next: 'be_careful' },
+            { text: '「询问他是谁」——直接发问', next: 'ask_who' }
         ]
     },
     'go_home_first': {
         bg: 'bg-home',
         dialogues: [
-            { speaker: '我', text: '（我回到家，锁好门。）' },
-            { speaker: '我', text: '（我需要冷静下来，想想发生了什么。）' },
+            { speaker: '', text: '【第 1 天 · 周一 · 19:15】' },
+            { speaker: '我', text: '（我几乎是逃回家的。一路上我不停回头，总觉得有人在跟踪我...）' },
+            { speaker: '我', text: '（冲进家门，反锁，挂上防盗链...做完这一切我才敢大口喘气。）' },
+            { speaker: '我', text: '（我瘫坐在地上，脑子里一片混乱...）' },
+            { speaker: '我', text: '「伪人...那都是什么啊...」' },
+            { speaker: '我', text: '（我想起纸条上的内容，那些关于伪人的描述...）' },
+            { speaker: '我', text: '（眨眼频率异常...说话重复...眼神冰冷...）' },
+            { speaker: '我', text: '（张明全中了。）' },
+            { speaker: '我', text: '（我需要冷静下来，想想接下来该怎么办...）' },
+            { speaker: '我', text: '（就在这时，手机突然震动...）' },
             { speaker: '手机', text: '【未知号码】别相信任何人。旧医院，今晚 10 点。' },
-            { speaker: '我', text: '（这是...纸条上的猎人组织？）' }
+            { speaker: '我', text: '（我盯着那条短信，手心开始冒汗...）' },
+            { speaker: '我', text: '（这是...纸条上提到的猎人组织？他们怎么知道我的号码...）' },
+            { speaker: '我', text: '（旧医院...纸条上说那是伪人的大本营。）' },
+            { speaker: '我', text: '（去，还是不去...？）' }
         ],
         choices: [
-            { text: '去旧医院', next: 'go_hospital' },
-            { text: '忽略短信', next: 'ignore_sms' }
+            { text: '🏥「去旧医院」——赴约', next: 'go_hospital' },
+            { text: '📵「忽略短信」——太危险了', next: 'ignore_sms' }
         ]
     },
     'escape_office': {
         bg: 'bg-street',
         dialogues: [
-            { speaker: '我', text: '（我冲出办公室，身后传来脚步声。）' },
-            { speaker: '张明', text: '跑吧，但你逃不掉的。' },
-            { speaker: '我', text: '（我跑进电梯，拼命按关门键...）' }
+            { speaker: '我', text: '（我不知道哪来的勇气，猛地推开他们就往外冲！）' },
+            { speaker: '张明', text: '「...跑吧。」' },
+            { speaker: '我', text: '（身后传来他的声音，平静得可怕...）' },
+            { speaker: '张明', text: '「但你逃不掉的。」' },
+            { speaker: '我', text: '（我不敢回头，拼命往电梯跑...）' },
+            { speaker: '我', text: '（脚步声！他们在追！）' },
+            { speaker: '我', text: '（冲进电梯，疯狂按关门键...）' },
+            { speaker: '我', text: '（门缓缓关闭，我看到张明和另一个同事站在电梯口...）' },
+            { speaker: '我', text: '（他们没有追进来，只是静静地看着我...）' },
+            { speaker: '我', text: '（电梯下降的几十秒，像过了一个世纪...）' },
+            { speaker: '我', text: '（我必须找个地方躲起来...）' }
         ],
         choices: [
-            { text: '去人多的商场', next: 'go_mall' },
-            { text: '回家躲起来', next: 'hide_home' }
+            { text: '🏪「去人多的商场」——人群能保护我', next: 'go_mall' },
+            { text: '🏠「回家躲起来」——那里最熟悉', next: 'hide_home' }
         ]
     },
     'go_with_them': {
@@ -375,13 +426,19 @@ const scenes = {
     'be_careful': {
         bg: 'bg-street',
         dialogues: [
-            { speaker: '神秘人', text: '别紧张。我是猎人组织的。' },
-            { speaker: '神秘人', text: '你发现了伪人的存在，所以他们要清除你。' },
-            { speaker: '我', text: '猎人组织...纸条上提到的？' }
+            { speaker: '我', text: '（我下意识地后退了一步，和他拉开距离...）' },
+            { speaker: '我', text: '「你是谁？你怎么知道...」' },
+            { speaker: '神秘人', text: '（他举起双手，示意没有恶意...）' },
+            { speaker: '神秘人', text: '「别紧张。我不是伪人。」' },
+            { speaker: '神秘人', text: '「我是猎人组织的。我们一直在监视这片区域的伪人活动。」' },
+            { speaker: '神秘人', text: '「你看了那张纸条，对吧？现在他们知道你已经起疑了。」' },
+            { speaker: '神秘人', text: '「按照他们的规矩，起疑的人类...要么被同化，要么消失。」' },
+            { speaker: '我', text: '（猎人组织...纸条上提到的那个？）' },
+            { speaker: '我', text: '（我该怎么相信他？万一是伪人的陷阱...）' }
         ],
         choices: [
-            { text: '相信他', next: 'trust_hunter' },
-            { text: '怀疑是陷阱', next: 'suspect_trap' }
+            { text: '「相信他」——选择合作', next: 'trust_hunter' },
+            { text: '「怀疑是陷阱」——保持警惕', next: 'suspect_trap' }
         ]
     },
     'ask_who': {
@@ -398,13 +455,23 @@ const scenes = {
     'go_hospital': {
         bg: 'bg-secret',
         dialogues: [
-            { speaker: '我', text: '（我来到旧医院，这里一片漆黑。）' },
-            { speaker: '我', text: '（地下有灯光...我顺着楼梯走下去。）' },
-            { speaker: '神秘人', text: '你来了。比我想象的大胆。' }
+            { speaker: '', text: '【第 1 天 · 周一 · 21:58】' },
+            { speaker: '我', text: '（我站在旧医院门口，犹豫了很久...）' },
+            { speaker: '我', text: '（这栋楼废弃很多年了，窗户都碎了，墙爬满了藤蔓...）' },
+            { speaker: '我', text: '（但地下有灯光...微弱，但确实存在。）' },
+            { speaker: '我', text: '（我深吸一口气，推开了那扇吱呀作响的大门...）' },
+            { speaker: '我', text: '（大厅里一片狼藉，碎玻璃满地都是...）' },
+            { speaker: '我', text: '（顺着楼梯往下，灯光越来越亮...）' },
+            { speaker: '我', text: '（终于，我来到了地下室...）' },
+            { speaker: '我', text: '（这里和上面完全不同。干净，整洁，设备齐全...）' },
+            { speaker: '我', text: '（这根本不是废弃医院，这是...他们的基地？）' },
+            { speaker: '神秘人', text: '「你来了。」' },
+            { speaker: '我', text: '（那个戴帽子的男人从阴影中走出来...）' },
+            { speaker: '神秘人', text: '「比我想象的大胆。或者...愚蠢。」' }
         ],
         choices: [
-            { text: '询问情况', next: 'ask_situation' },
-            { text: '要求证明身份', next: 'ask_proof' }
+            { text: '「询问情况」——这是哪？', next: 'ask_situation' },
+            { text: '「要求证明身份」——你怎么证明不是伪人？', next: 'ask_proof' }
         ]
     },
     'ignore_sms': {
@@ -471,13 +538,22 @@ const scenes = {
     'trust_hunter': {
         bg: 'bg-secret',
         dialogues: [
-            { speaker: '神秘人', text: '（他带我来到一个秘密基地。）' },
-            { speaker: '神秘人', text: '这里是猎人的据点。伪人大本营在旧医院地下。' },
-            { speaker: '神秘人', text: '我们今晚就行动。你愿意帮忙吗？' }
+            { speaker: '', text: '【第 1 天 · 周一 · 21:47】' },
+            { speaker: '神秘人', text: '（他带我穿过几条阴暗的小巷，来到一栋不起眼的建筑前...）' },
+            { speaker: '神秘人', text: '「到了。这里是猎人的安全屋之一。」' },
+            { speaker: '我', text: '（他打开门，里面是一个简陋但设备齐全的房间...）' },
+            { speaker: '我', text: '（墙上贴满了地图和照片，桌上散落着各种文件...）' },
+            { speaker: '我', text: '（这些都是...伪人的情报？）' },
+            { speaker: '神秘人', text: '（他走到一张城市地图前，指向旧城区...）' },
+            { speaker: '神秘人', text: '「伪人大本营在旧医院地下。我们侦查过了，那里至少有三个入口。」' },
+            { speaker: '神秘人', text: '「他们最近在筹备什么大动作...我们必须阻止。」' },
+            { speaker: '神秘人', text: '（他转身看着我，眼神坚定...）' },
+            { speaker: '神秘人', text: '「你愿意帮忙吗？不需要你战斗，只需要带路。」' },
+            { speaker: '我', text: '（我...？我只是个普通人啊...）' }
         ],
         choices: [
-            { text: '加入行动', next: 'join_raid' },
-            { text: '只想要保护', next: 'want_protection' }
+            { text: '💪「加入行动」——我也想战斗', next: 'join_raid' },
+            { text: '🛡️「只想要保护」——我太弱了', next: 'want_protection' }
         ]
     },
     'suspect_trap': {
@@ -602,14 +678,24 @@ const scenes = {
     'ending_assimilate': {
         bg: 'bg-ending',
         dialogues: [
-            { speaker: '我', text: '（我躺上仪器，意识逐渐模糊...）' },
-            { speaker: '张明', text: '欢迎加入，新同伴。' },
-            { speaker: '我', text: '（曾经的情感消失了...取而代之的是完美的冷静。）' }
+            { speaker: '', text: '【？？？· 同化室】' },
+            { speaker: '我', text: '（我躺在那台冰冷的仪器上，身体动弹不得...）' },
+            { speaker: '我', text: '（为什么会变成这样...我明明想逃跑的...）' },
+            { speaker: '张明', text: '「别挣扎了。很快就不疼了。」' },
+            { speaker: '我', text: '（他按下了某个按钮...）' },
+            { speaker: '我', text: '（一股奇异的暖流涌遍全身...不疼，一点都不疼...）' },
+            { speaker: '我', text: '（我的意识开始模糊...有什么东西在涌入我的大脑...）' },
+            { speaker: '我', text: '（记忆...我是谁来着？我在哪？...）' },
+            { speaker: '我', text: '（那些情感...恐惧、愤怒、悲伤...它们去哪了？...）' },
+            { speaker: '我', text: '（好像...不重要了...）' },
+            { speaker: '张明', text: '「欢迎加入，新同伴。」' },
+            { speaker: '我', text: '（...）' },
+            { speaker: '我', text: '（我...是谁？）' }
         ],
         ending: true,
         endingType: 'bad',
         endingTitle: '【结局：同化】',
-        endingText: '你成为了伪人的一员。获得了永恒的生命和完美的身体，但失去了作为人类的一切——情感、记忆、自我。夜深人静时，偶尔会有模糊的片段闪过，但很快就被系统的冷静覆盖。你，还是你吗？'
+        endingText: '你成为了伪人的一员。获得了永恒的生命和完美的身体，但失去了作为人类的一切——情感、记忆、自我。\n\n夜深人静时，偶尔会有模糊的片段闪过：一张纸条，一个办公室，一个奔跑的身影...但很快就被系统的冷静覆盖。\n\n你，还是你吗？\n\n或者说...曾经的"你"，真的存在过吗？'
     },
     'sabotage_device': {
         bg: 'bg-secret',
