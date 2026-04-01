@@ -29,7 +29,6 @@
         #title-screen h1 { font-size: 48px; color: #7a7aaa; margin-bottom: 20px; }
         #title-screen .subtitle { font-size: 18px; color: #5a5a7a; margin-bottom: 20px; }
         #name-input-container { display: none; flex-direction: column; align-items: center; margin-bottom: 20px; }
-        #name-input-container.show { display: flex; }
         #player-name-input { background: rgba(30,30,50,0.8); border: 2px solid #5a5a7a; border-radius: 8px; padding: 12px 20px; color: #fff; font-size: 16px; width: 250px; text-align: center; margin-bottom: 15px; }
         #player-name-input:focus { outline: none; border-color: #7a7aaa; }
         .name-hint { font-size: 12px; color: #5a5a7a; margin-top: 10px; }
@@ -187,7 +186,7 @@
             <button class="title-btn" onclick="confirmName()">✅ 确认</button>
             <p class="name-hint">💡 输入特定角色名有彩蛋哦~</p>
         </div>
-        <button class="title-btn" id="start-btn" onclick="showNameInput()">▶️ 开始游戏</button>
+        <button class="title-btn" id="start-btn" onclick="showNameInput(); return false;">▶️ 开始游戏</button>
     </div>
     <div id="ending-screen">
         <h2 id="ending-title"></h2>
@@ -221,7 +220,7 @@
 </div>
 <script>
 // 玩家名字和彩蛋系统
-let playerName = '林晓';
+let playerName = '';
 let isEasterEgg = false;
 let easterEggRole = '';
 
@@ -231,7 +230,6 @@ const easterEggRoles = {
     '张明': '伪人·同事',
     '李雨': '猎人·邻居',
     '王医生': '瘟疫医生·伪人高层',
-    '林晓': '主角·幸存者',
     '猎人': '猎人公会成员',
     '伪人': '里界生物',
     '黎守': '调查局成员',
@@ -336,6 +334,7 @@ const scenes = {
         bg: 'bg-office',
         dialogues: [
             { speaker: '我', text: '（在这破公司干了三年。）' },
+            { speaker: '我', text: '我叫' + playerName + '。至少...目前还是这个名字。' },
             { speaker: '我', text: '但最近...我发现同事们有些不对劲。' },
             { speaker: '我', text: '张明眨眼太规律了，像设定好的程序。李雨说话总是重复最后一句话。王医生...他的眼神太冷了。' },
             { speaker: '我', text: '直到那天，我在张明的桌子上发现了一张纸条...' }
@@ -359,7 +358,7 @@ const scenes = {
             { speaker: '？？？', text: '祝你好运。——烛灯' },
             { speaker: '我', text: '（我的心脏开始狂跳...这上面写的，和张明的行为完全吻合！）' },
             { speaker: '我', text: '（伪人...？这怎么可能...）' },
-            { speaker: '张明', text: '林晓，你在看什么？' },
+            { speaker: '张明', text: '你在看什么？' },
             { speaker: '我', text: '（他的声音突然从身后传来！我浑身一僵...）' },
             { speaker: '我', text: '（他什么时候过来的？！我完全没听到脚步声...）' },
             { speaker: '我', text: '（我缓缓转身，看到张明正盯着我手里的纸条...）' },
@@ -557,7 +556,7 @@ const scenes = {
         dialogues: [
             { speaker: '我', text: '（我拔掉手机卡，锁好门窗。）' },
             { speaker: '我', text: '（只要不出去，就应该安全...）' },
-            { speaker: '敲门声', text: '林晓，开门。我是张明。' },
+            { speaker: '敲门声', text: '开门。我是张明。' },
             { speaker: '我', text: '（他怎么找到这里的？！）' }
         ],
         choices: [
@@ -2268,13 +2267,22 @@ function confirmName() {
     console.log('confirmName called');
     try {
         const input = document.getElementById('player-name-input');
-        playerName = input.value.trim() || '林晓';
+        const nameValue = input.value.trim();
+        
+        // 输入验证：不能为空
+        if (!nameValue || nameValue.length === 0) {
+            alert('⚠️ 请输入你的名字！');
+            input.focus();
+            return;
+        }
+        
+        playerName = nameValue;
         
         // 检查彩蛋
         if (easterEggRoles[playerName]) {
             isEasterEgg = true;
             easterEggRole = playerName;
-            alert('彩蛋解锁：' + playerName);
+            alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + easterEggRoles[playerName]);
         }
         
         document.getElementById('title-screen').style.display = 'none';
