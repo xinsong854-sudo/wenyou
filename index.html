@@ -2513,3 +2513,61 @@ function addPhoneButton() {
 }
 let currentScene = 'start';
 let dialogueIndex = 0;
+
+// 核心游戏函数
+function loadScene(sceneId) {
+    const scene = scenes[sceneId];
+    if (!scene) { console.error('Scene not found:', sceneId); return; }
+    currentScene = sceneId;
+    dialogueIndex = 0;
+    const bg = document.getElementById('background');
+    bg.className = 'bg-' + (scene.bg || 'office');
+    if (scene.ending) { showEnding(scene); return; }
+    showDialogue(scene.dialogues[0]);
+    if (scene.choices) showChoices(scene.choices);
+}
+
+function showDialogue(dialogue) {
+    document.getElementById('speaker-name').textContent = dialogue.speaker || '';
+    document.getElementById('dialogue-text').innerHTML = (dialogue.text || '').replace(/\n/g, '<br>');
+    document.getElementById('dialogue-box').style.display = 'block';
+}
+
+function showChoices(choices) {
+    const container = document.getElementById('choices-container');
+    container.innerHTML = '';
+    choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = choice.text;
+        btn.onclick = (e) => { e.stopPropagation(); if (choice.next) loadScene(choice.next); };
+        container.appendChild(btn);
+    });
+    container.style.display = 'flex';
+}
+
+function nextDialogue() {
+    const scene = scenes[currentScene];
+    if (!scene) return;
+    document.getElementById('choices-container').style.display = 'none';
+    dialogueIndex++;
+    if (dialogueIndex < scene.dialogues.length) {
+        showDialogue(scene.dialogues[dialogueIndex]);
+        if (scene.choices && dialogueIndex === scene.dialogues.length - 1) showChoices(scene.choices);
+    }
+}
+
+function showEnding(scene) {
+    const endingScreen = document.getElementById('ending-screen');
+    let text = scene.endingText.replace(/你/g, playerName);
+    let title = scene.endingTitle.replace(/你/g, playerName);
+    if (isEasterEgg) { title = '🎉 ' + title; text = '【彩蛋：' + easterEggRoles[easterEggRole] + '】\n\n' + text; }
+    const icons = { 'bad': '💀', 'normal': '🌅', 'true': '⭐' };
+    document.getElementById('ending-title').innerHTML = (icons[scene.endingType] || '🎭') + ' ' + title;
+    document.getElementById('ending-title').className = 'ending-' + scene.endingType;
+    document.getElementById('ending-content').innerHTML = text.replace(/\n/g, '<br>');
+    endingScreen.style.display = 'flex';
+}
+</script>
+</body>
+</html>
