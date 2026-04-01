@@ -2355,8 +2355,7 @@ function showDialogue(dialogue) {
     dialogueIndex = 0;
     
     // 简单显示，不打字机效果
-    textEl.innerHTML = currentText.replace(/
-/g, '<br>');
+    textEl.innerHTML = currentText.replace(/\n/g, '<br>');
     
     document.getElementById('dialogue-box').style.display = 'block';
     document.getElementById('continue-indicator').style.display = 'block';
@@ -2482,7 +2481,6 @@ function showPhoneTab(tab) {
                 </div>
             </div>
         `;
-    }
     } else if (tab === 'map') {
         content.innerHTML = `
             <div class="phone-msg-list">
@@ -2498,6 +2496,7 @@ function showPhoneTab(tab) {
             </div>
         `;
     }
+}
 
 // 在菜单中添加手机按钮
 function addPhoneButton() {
@@ -2511,8 +2510,6 @@ function addPhoneButton() {
         menuButtons.insertBefore(phoneBtn, menuButtons.firstChild);
     }
 }
-let currentScene = 'start';
-let dialogueIndex = 0;
 
 // 核心游戏函数
 function loadScene(sceneId) {
