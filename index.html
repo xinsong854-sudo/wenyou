@@ -2949,12 +2949,10 @@ function doDisCheckFake() {
     let result;
     if (roll <= 5) {
         result = '大成功';
-        // 大成功→ending_perfect
         loadScene('ending_perfect');
         return;
     } else if (roll >= 96) {
         result = '大失败';
-        // 大失败→ending_exposed
         loadScene('ending_exposed');
         return;
     } else if (roll <= dis + skill - dc + 50) {
@@ -2975,6 +2973,47 @@ function doDisCheckFake() {
         targetValue: dis + skill,
         result: result,
         description: '伪装成正常人类'
+    });
+}
+
+// SAN 检定函数（go_home_first 后）
+function doSanCheckHome() {
+    if (!playerCharacter) return;
+    
+    const san = playerCharacter.stats.SAN;
+    const skill = playerCharacter.skills.心理学 || 0;
+    const dc = 50;
+    const roll = Math.floor(Math.random() * 100) + 1;
+    
+    let result;
+    if (roll <= 5) {
+        result = '大成功';
+        // 大成功→ending_mastermind
+        loadScene('ending_mastermind');
+        return;
+    } else if (roll >= 96) {
+        result = '大失败';
+        // 大失败→ending_paranoia
+        loadScene('ending_paranoia');
+        return;
+    } else if (roll <= san + skill - dc + 50) {
+        result = '成功';
+    } else {
+        result = '失败';
+    }
+    
+    window.lastCheckResult = result;
+    
+    showCheckResult({
+        attribute: 'SAN',
+        attrValue: san,
+        skill: '心理学',
+        skillValue: skill,
+        dc: dc,
+        roll: roll,
+        targetValue: san + skill,
+        result: result,
+        description: '冷静分析当前局势'
     });
 }
 
