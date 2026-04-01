@@ -187,7 +187,7 @@
             <h2 style="color:#7a7aaa; margin-bottom:15px;">📋 角色创建</h2>
             
             <div id="stats-allocation" style="width:100%;">
-                <p style="color:#aaa; margin-bottom:10px;">分配属性点（剩余：<span id="stat-points-left" style="color:#4ecdc4;">250</span>）</p>
+                <p style="color:#aaa; margin-bottom:10px;">分配属性点（剩余:<span id="stat-points-left" style="color:#4ecdc4;">250</span>）</p>
                 <div id="stats-slots"></div>
             </div>
             
@@ -203,7 +203,7 @@
             </div>
             
             <div id="skills-allocation" style="width:100%; margin-top:15px;">
-                <p style="color:#aaa; margin-bottom:10px;">分配技能点（剩余：<span id="skill-points-left" style="color:#4ecdc4;">30</span>）</p>
+                <p style="color:#aaa; margin-bottom:10px;">分配技能点（剩余:<span id="skill-points-left" style="color:#4ecdc4;">30</span>）</p>
                 <div id="skills-slots"></div>
             </div>
             
@@ -279,8 +279,8 @@
         </div>
         <div id="check-result" style="font-size:48px; font-weight:bold; margin-bottom:20px; text-shadow:0 0 20px currentColor;"></div>
         <div style="display:flex; justify-content:space-around; color:#aaa;">
-            <div>骰子：<span id="check-roll" style="color:#fff;">--</span>/100</div>
-            <div>目标：<span id="check-target" style="color:#fff;">--</span></div>
+            <div>骰子:<span id="check-roll" style="color:#fff;">--</span>/100</div>
+            <div>目标:<span id="check-target" style="color:#fff;">--</span></div>
         </div>
     </div>
 </div>
@@ -505,7 +505,7 @@ const scenes = {
             { speaker: '？？？', text: '1. 伪人会模仿人类，但眨眼频率异常（太规律）' },
             { speaker: '？？？', text: '2. 他们说话会重复关键词或最后一句话' },
             { speaker: '？？？', text: '3. 伪人大本营不是具体地点，是论坛（槐安公寓业主论坛）' },
-            { speaker: '？？？', text: '4. 猎人组织联系方式：138****（加密部分）' },
+            { speaker: '？？？', text: '4. 猎人组织联系方式:138****（加密部分）' },
             { speaker: '？？？', text: '5. 如果发现被跟踪，去人多的地方（他们不敢在人群前动手）' },
             { speaker: '？？？', text: '6. 不要报警（警察不会相信你）' },
             { speaker: '？？？', text: '祝你好运。——烛灯（揭秘人组织最后成员）' },
@@ -1066,7 +1066,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：同化】',
+        endingTitle: '【结局:同化】',
         endingText: '你成了它们的一员。\n\n不疼，不累，不难过。\n\n偶尔会有些碎片闪过——一张纸条，一间办公室，一双发抖的手...\n\n但很快就没了。\n\n你不再记得自己叫什么。\n\n你不再记得自己曾经是人。\n\n...这样也挺好，对吧？'
     },
     'sabotage_device': {
@@ -1229,7 +1229,7 @@ const scenes = {
         bg: 'bg-street',
         dialogues: [
             { speaker: '我', text: '（看来走不了了...）' },
-            { speaker: '我', text: '（我回到纸条上的思路：对抗或者躲藏。）' }
+            { speaker: '我', text: '（我回到纸条上的思路:对抗或者躲藏。）' }
         ],
         choices: [
             { text: '联系猎人', next: 'contact_hunter' },
@@ -1421,7 +1421,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：屈服】',
+        endingTitle: '【结局:屈服】',
         endingText: '你选择了屈服，成为伪人的一员。活下来了，但不再是人类。每当夜深，你会想起曾经作为人类的时光，但那些记忆越来越模糊...最终，你连自己曾经是人类这件事都忘记了。'
     },
     'fight_death': {
@@ -1433,8 +1433,8 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：牺牲】',
-        endingText: '你战斗到了最后一刻，但伪人的力量远超人类。你的意识消散前，只有一个念头：希望有人能阻止他们...你的牺牲没有白费，猎人组织发现了你的遗体，顺藤摸瓜捣毁了一个伪人据点。但代价，是你的生命。'
+        endingTitle: '【结局:牺牲】',
+        endingText: '你战斗到了最后一刻，但伪人的力量远超人类。你的意识消散前，只有一个念头:希望有人能阻止他们...你的牺牲没有白费，猎人组织发现了你的遗体，顺藤摸瓜捣毁了一个伪人据点。但代价，是你的生命。'
     },
     'jump_window': {
         bg: 'bg-ending',
@@ -1455,7 +1455,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：投降】',
+        endingTitle: '【结局:投降】',
         endingText: '你选择了投降。伪人没有杀你，但也没有放过你。你被带到大本营，接受了"同化"。醒来后，你成为了他们的一员——完美、冷静、没有情感。曾经的"你"，从此消失。'
     },
     'rush_out': {
@@ -1546,7 +1546,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：孤立无援】',
+        endingTitle: '【结局:孤立无援】',
         endingText: '你拒绝了所有帮助，选择独自面对。但伪人的数量远超你的想象。在一条阴暗的小巷里，你被包围了。最后的记忆里，只有无数双没有情感的眼睛...如果当初选择了信任，结局会不会不同？'
     },
     'refuse_down': {
@@ -1563,7 +1563,7 @@ const scenes = {
     'test_them': {
         bg: 'bg-home',
         dialogues: [
-            { speaker: '我', text: '（我朝楼下喊："暗号是什么？"）' },
+            { speaker: '我', text: '（我朝楼下喊:"暗号是什么？"）' },
             { speaker: '开车的人', text: '（他愣了一下）什么暗号？' },
             { speaker: '我', text: '（果然！真猎人会知道暗号的！）' }
         ],
@@ -1604,7 +1604,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：幸存者】',
+        endingTitle: '【结局:幸存者】',
         endingText: '你成功逃出了伪人大本营，并破坏了他们的部分设施。虽然没能彻底摧毁他们，但你活下来了。猎人组织后来根据你提供的信息，捣毁了多个伪人据点。你隐姓埋名，开始了新的生活。偶尔，你还会想起那段恐怖的经历...但至少，你还活着。'
     },
     'destroy_core': {
@@ -1661,7 +1661,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：无力】',
+        endingTitle: '【结局:无力】',
         endingText: '你的挣扎毫无意义。伪人的力量远超人类。你被强行带往同化室...醒来后，你成为了他们的一员。曾经的你，只存在于模糊的记忆碎片中。'
     },
     'follow_mystery': {
@@ -1719,7 +1719,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：隐士】',
+        endingTitle: '【结局:隐士】',
         endingText: '你选择了一生的躲藏。没有战斗，没有荣耀，只有无尽的逃亡。但你活下来了，以人类的身份。在生命的最后时刻，你回想这一生...值得吗？也许吧。至少，你从未背叛过自己的人性。'
     },
     'decide_fight': {
@@ -1730,7 +1730,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：猎人】',
+        endingTitle: '【结局:猎人】',
         endingText: '你加入了猎人组织，成为对抗伪人的战士。每一天都充满危险，但你不再恐惧。因为你有了同伴，有了目标。伪人还在暗处，但你们会找到他们，一个都不放过。这场战争，人类必胜。'
     },
     'normal_life': {
@@ -1742,7 +1742,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：疑心】',
+        endingTitle: '【结局:疑心】',
         endingText: '你活下来了，但再也无法信任任何人。每一个眼神、每一句话，你都会反复琢磨。你成了孤岛，在人群中却无比孤独。伪人也许没有摧毁你的身体，但他们摧毁了你对世界的信任。这，算胜利吗？'
     },
     'ending_captured': {
@@ -1753,7 +1753,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：捕获】',
+        endingTitle: '【结局:捕获】',
         endingText: '你拒绝了所有帮助，最终被伪人捕获。没有奇迹，没有救援。你被带往大本营，成为无数培养舱中的一个。也许，在某个平行世界里，你做出了不同的选择...'
     },
     'lucky_escape': {
@@ -1775,7 +1775,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：远走】',
+        endingTitle: '【结局:远走】',
         endingText: '你成功逃离了伪人控制的城市，在远方开始了新的生活。偶尔，你会想起那些经历，想起那些没能逃出来的人。你无法拯救所有人，但至少，你拯救了自己。这样，就够了吧。'
     },
     'ending_starve': {
@@ -1786,7 +1786,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：困兽】',
+        endingTitle: '【结局:困兽】',
         endingText: '你躲过了伪人的搜索，却没躲过饥饿和干渴。在衣柜的黑暗中，你慢慢失去了意识。没有人知道你的结局，就像没有人知道这座城市里还有多少这样的悲剧...你的躲藏，毫无意义。'
     },
     'survive_jump': {
@@ -1808,7 +1808,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：残躯】',
+        endingTitle: '【结局:残躯】',
         endingText: '你跳窗求生，但摔断了腿。无法移动的你，只能眼睁睁看着张明从楼梯下来...最后的画面，是他冷漠的脸。如果当初选择了其他路，会不会不一样？'
     },
     'ending_hunter': {
@@ -1819,7 +1819,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'true',
-        endingTitle: '【结局：猎人】',
+        endingTitle: '【结局:猎人】',
         endingText: '你加入了猎人组织，成为对抗伪人的中坚力量。凭借你的经历和勇气，你参与了多次行动，捣毁了多个伪人据点。战争还在继续，但人类正在反击。你不再是受害者，你是战士。这是你的选择，也是你的荣耀。'
     },
     'want_normal': {
@@ -1841,7 +1841,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：落单】',
+        endingTitle: '【结局:落单】',
         endingText: '你错过了救援，独自面对伪人。结局可想而知。在这个城市里，每天都有人消失，没人知道他们去了哪里。你，只是其中之一。'
     },
     'escape_alone': {
@@ -1874,7 +1874,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：隐士】',
+        endingTitle: '【结局:隐士】',
         endingText: '你躲了一辈子。没有战斗，没有冒险，只有无尽的恐惧。但你活下来了，以人类的身份。这，算胜利吗？'
     },
     'solo_fight': {
@@ -1885,8 +1885,8 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：孤勇】',
-        endingText: '你选择了独自战斗。勇气可嘉，但伪人太多了。在一次行动中，你被包围了。最后的念头是：如果当初选择了同伴，会不会不一样？'
+        endingTitle: '【结局:孤勇】',
+        endingText: '你选择了独自战斗。勇气可嘉，但伪人太多了。在一次行动中，你被包围了。最后的念头是:如果当初选择了同伴，会不会不一样？'
     },
     'find_hotel': {
         bg: 'bg-home',
@@ -2044,7 +2044,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'true',
-        endingTitle: '【结局：摧毁者】',
+        endingTitle: '【结局:摧毁者】',
         endingText: '你成功摧毁了伪人大本营的核心设施。虽然没能消灭所有伪人，但他们的计划被重创了。你成为英雄，虽然没人知道你的名字。人类和伪人的战争还在继续，但因为你，人类有了希望。这是你的选择，也是你的荣耀。'
     },
     'caught_destroy': {
@@ -2055,7 +2055,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：失败】',
+        endingTitle: '【结局:失败】',
         endingText: '你的破坏行动失败了。被捕获后，你被强制同化。醒来后，你成为了伪人的一员，甚至参与了抓捕其他人类的行动。曾经的英雄，变成了敌人。讽刺吗？'
     },
     'anger_more': {
@@ -2163,7 +2163,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：独行侠】',
+        endingTitle: '【结局:独行侠】',
         endingText: '你选择了独自行动，但伪人太多了。被捕获后，你被强制同化。如果当初选择了同伴，结局会不会不同？'
     },
     'keep_shoot': {
@@ -2239,7 +2239,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：平凡】',
+        endingTitle: '【结局:平凡】',
         endingText: '你回归了普通生活。没有战斗，没有冒险，只有日复一日的平凡。但你知道，在城市的某个角落，伪人还在活动。你选择了平凡，这没有错。至少，你还活着。'
     },
     'refuse_device': {
@@ -2271,7 +2271,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'normal',
-        endingTitle: '【结局：新生】',
+        endingTitle: '【结局:新生】',
         endingText: '你放下了过去，开始了新的生活。那些经历成为了回忆，不再困扰你。这是你的选择，也是你的解脱。'
     },
     'next_day': {
@@ -2291,7 +2291,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：酒店】',
+        endingTitle: '【结局:酒店】',
         endingText: '你在酒店被伪人找到。没有救援，没有奇迹。你成为了他们的一员。'
     },
     'hide_office': {
@@ -2393,7 +2393,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：战斗】',
+        endingTitle: '【结局:战斗】',
         endingText: '你选择了战斗，但力量悬殊。你牺牲了，但你的勇气激励了其他人。'
     },
     'escape_chance': {
@@ -2423,7 +2423,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：出口】',
+        endingTitle: '【结局:出口】',
         endingText: '你在出口被抓。就差一步...自由与你擦肩而过。'
     },
     'find_other_way': {
@@ -2443,7 +2443,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：团队】',
+        endingTitle: '【结局:团队】',
         endingText: '团队行动失败了。你们一起被抓，一起被同化。至少，不是一个人...？'
     },
     'ending_sacrifice': {
@@ -2453,7 +2453,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'true',
-        endingTitle: '【结局：牺牲】',
+        endingTitle: '【结局:牺牲】',
         endingText: '你牺牲了自己，让队友成功摧毁了核心。你的牺牲没有白费，伪人的计划被重创。你是英雄，虽然没人知道你的名字。'
     },
     'fight_end': {
@@ -2463,7 +2463,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：战死】',
+        endingTitle: '【结局:战死】',
         endingText: '你战斗到了最后一刻。虽然牺牲了，但你消灭了多个伪人。你是战士。'
     },
     'refuse_help': {
@@ -2483,7 +2483,7 @@ const scenes = {
         ],
         ending: true,
         endingType: 'bad',
-        endingTitle: '【结局：伤势】',
+        endingTitle: '【结局:伤势】',
         endingText: '你的伤势恶化，没有得到及时治疗。你死在了街头。'
     },
     'escape_office_2': {
@@ -2639,7 +2639,7 @@ function showNameInput() {
         document.getElementById('player-name-input').focus();
     } catch(e) {
         console.error('showNameInput error:', e);
-        alert('错误：' + e.message);
+        alert('错误:' + e.message);
     }
 }
 
@@ -2930,7 +2930,7 @@ function confirmName() {
         
         // 初始化默认车卡数据（不显示 UI）
         playerStats = { SAN: 50, INS: 50, DIS: 50, LUK: 50, SUR: 50 };
-        playerSkills = { 侦查：10, 心理学：10, 伪装：10, 急救：10, 生存：10 };
+        playerSkills = { 侦查:10, 心理学:10, 伪装:10, 急救:10, 生存:10 };
         playerCharacter = {
             name: playerName,
             stats: { ...playerStats },
@@ -2950,11 +2950,11 @@ function confirmName() {
             easterEggRole = playerName;
             // 使用官方角色属性
             playerCharacter.stats = { ...officialChar.stats };
-            alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + officialChar.background);
+            alert('🎉 彩蛋解锁:' + playerName + '\n身份:' + officialChar.background);
         } else if (easterEggRoles[playerName]) {
             isEasterEgg = true;
             easterEggRole = playerName;
-            alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + easterEggRoles[playerName]);
+            alert('🎉 彩蛋解锁:' + playerName + '\n身份:' + easterEggRoles[playerName]);
         }
         
         // 隐藏标题界面，直接开始游戏
@@ -2963,7 +2963,7 @@ function confirmName() {
         loadScene('start');
     } catch(e) {
         console.error('confirmName error:', e);
-        alert('错误：' + e.message);
+        alert('错误:' + e.message);
     }
 }
 
@@ -3328,7 +3328,7 @@ function showEnding(scene) {
     
     if (isEasterEgg) {
         endingTitleText = '🎉 ' + endingTitleText;
-        endingText = '【彩蛋身份：' + easterEggRoles[easterEggRole] + '】\n\n' + endingText;
+        endingText = '【彩蛋身份:' + easterEggRoles[easterEggRole] + '】\n\n' + endingText;
     }
     
     const typeIcons = { 'bad': '💀', 'normal': '🌅', 'true': '⭐' };
@@ -3354,7 +3354,7 @@ function showPhoneTab(tab) {
                 ${inventory.some(i => i.id === 'note') ? `
                 <div class="phone-msg unread">
                     <strong>神秘人</strong><br>
-                    记住：伪人会模仿人类，但眨眼频率异常。不要单独去旧医院。
+                    记住:伪人会模仿人类，但眨眼频率异常。不要单独去旧医院。
                 </div>` : ''}
                 ${inventory.some(i => i.id === 'hunter_contact') ? `
                 <div class="phone-msg unread">
