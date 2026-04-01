@@ -353,7 +353,7 @@ const scenes = {
     'start': {
         bg: 'bg-office',
         dialogues: [
-            { speaker: '我', text: '我叫林晓，在这家公司工作三年了。' },
+            { speaker: '我', text: '（在这破公司干了三年。）' },
             { speaker: '我', text: '但最近...我发现同事们有些不对劲。' },
             { speaker: '我', text: '张明眨眼太规律了，像设定好的程序。李雨说话总是重复最后一句话。王医生...他的眼神太冷了。' },
             { speaker: '我', text: '直到那天，我在张明的桌子上发现了一张纸条...' }
@@ -1182,7 +1182,7 @@ const scenes = {
         ending: true,
         endingType: 'bad',
         endingTitle: '【结局：投降】',
-        endingText: '你选择了投降。伪人没有杀你，但也没有放过你。你被带到大本营，接受了"同化"。醒来后，你成为了他们的一员——完美、冷静、没有情感。人类林晓，从此消失。'
+        endingText: '你选择了投降。伪人没有杀你，但也没有放过你。你被带到大本营，接受了"同化"。醒来后，你成为了他们的一员——完美、冷静、没有情感。曾经的"你"，从此消失。'
     },
     'rush_out': {
         bg: 'bg-street',
@@ -1303,7 +1303,7 @@ const scenes = {
         dialogues: [
             { speaker: '我', text: '（我在通风管道里继续前进...）' },
             { speaker: '我', text: '（我看到了...一个巨大的培养舱，里面是...）' },
-            { speaker: '我', text: '（是我自己？！不，是另一个"林晓"！）' }
+            { speaker: '我', text: '（是...我自己？！不，是另一个"我"！）' }
         ],
         choices: [
             { text: '震惊', next: 'shocked_clone' },
@@ -2500,10 +2500,11 @@ function showDialogue() {
     // 替换主角名字
     let speaker = dialogue.speaker;
     let text = dialogue.text;
-    if (speaker === '我') {
+    if (speaker === '我' || speaker === '林晓') {
         speaker = playerName;
     }
     text = text.replace(/我/g, playerName);
+    text = text.replace(/林晓/g, playerName);
     
     // 特殊文本样式处理
     if (speaker === '') {
