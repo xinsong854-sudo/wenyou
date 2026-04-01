@@ -2922,29 +2922,6 @@ function showTitle() {
     document.getElementById('choices-container').style.display = 'none';
     document.getElementById('title-screen').style.display = 'flex';
 }
-
-;
-    localStorage.setItem('pseudoSave' + slot, JSON.stringify(data));
-    renderSaveSlots();
-}
-
-
-}
-
-
-
-
-
-
-
- else {
-            slot.innerHTML = '<div class="slot-number">存档 ' + i + '</div><div class="slot-info">空</div>';
-        }
-        slot.onclick = () => {
-            if (isSave) saveGame(i);
-            else loadGame(i);
-            hidePanel();
-        };
         container.appendChild(slot);
     }
 }
