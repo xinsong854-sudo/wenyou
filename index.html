@@ -53,6 +53,53 @@
         .rules-box h3 { color: #ff6b6b; margin-bottom: 10px; }
         .rules-box ul { color: #aaa; padding-left: 20px; }
         .rules-box li { margin: 5px 0; }
+        /* 视觉增强 */
+        .glitch-text { animation: glitch 0.3s infinite; display: inline-block; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        .pulse-text { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .danger-zone { background: rgba(139, 0, 0, 0.3); animation: dangerPulse 3s infinite; }
+        @keyframes dangerPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(139, 0, 0, 0.8); }
+        }
+        .safe-zone { background: rgba(78, 205, 196, 0.2); }
+        .typing-cursor::after { content: '▋'; animation: blink 0.7s infinite; color: #7a7aaa; }
+        .scene-transition { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* 手机界面 */
+        #phone-ui { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; height: 600px; background: #1a1a2e; border: 3px solid #4a4a6a; border-radius: 20px; z-index: 50; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        #phone-screen { width: 100%; height: 100%; background: #0a0a1a; padding: 10px; overflow-y: auto; }
+        .phone-header { background: #2a2a4a; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        .phone-signal { font-size: 12px; color: #7a7aaa; }
+        .phone-app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px; }
+        .phone-app { background: #3a3a5a; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; font-size: 24px; }
+        .phone-app:hover { background: #4a4a6a; }
+        .phone-app-label { font-size: 10px; color: #aaa; margin-top: 5px; }
+        .phone-msg-list { padding: 10px; }
+        .phone-msg { background: #2a2a4a; border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 12px; }
+        .phone-msg.unread { border-left: 3px solid #4ecdc4; }
+        .phone-btn { background: #4a4a6a; border: none; border-radius: 8px; padding: 10px; color: #fff; width: 100%; margin-top: 10px; cursor: pointer; }
+        .phone-inventory { padding: 10px; }
+        .phone-item { background: #2a2a4a; border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+        .phone-item .item-name { color: #fff; }
+        .phone-item .item-desc { color: #7a7aaa; font-size: 11px; }
+        .phone-close { position: absolute; top: 10px; right: 10px; background: #5a3a3a; border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+        .phone-tab-bar { position: absolute; bottom: 0; width: 100%; height: 50px; background: #2a2a4a; display: flex; justify-content: space-around; align-items: center; }
+        .phone-tab { color: #7a7aaa; font-size: 20px; cursor: pointer; padding: 5px; }
+        .phone-tab.active { color: #4ecdc4; }
+
     </style>
 </head>
 <body>
@@ -85,7 +132,25 @@
         <div id="continue-indicator">▼</div>
     </div>
     <div id="choices-container"></div>
-    <div id="save-load-panel">
+    
+    <div id="phone-ui">
+        <button class="phone-close" onclick="closePhone()">×</button>
+        <div id="phone-screen">
+            <div class="phone-header">
+                <div class="phone-signal">📶 伪人大本营网络</div>
+                <div class="phone-signal" id="phone-time">00:00</div>
+            </div>
+            <div id="phone-content">
+                <div class="phone-app-grid">
+                    <div class="phone-app" onclick="showPhoneTab('messages')">💬<div class="phone-app-label">消息</div></div>
+                    <div class="phone-app" onclick="showPhoneTab('inventory')">🎒<div class="phone-app-label">道具</div></div>
+                    <div class="phone-app" onclick="showPhoneTab('notes')">📝<div class="phone-app-label">笔记</div></div>
+                    <div class="phone-app" onclick="showPhoneTab('map')">🗺️<div class="phone-app-label">地图</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="save-load-panel">
         <h2 id="panel-title">存档</h2>
         <div class="save-slots" id="save-slots"></div>
         <div class="panel-buttons">
@@ -214,7 +279,7 @@ const scenes = {
             { speaker: '我', text: '直到那天，我在张明的桌子上发现了一张纸条...' }
         ],
         choices: [
-            { text: '📄 查看纸条内容', next: 'read_note' }
+            { text: '📄 查看纸条内容', next: 'read_note', onclick: 'addItem({id:\"note\",name:\"📜 生存指南\",desc:\"伪人识别方法和生存规则\"})' }
         ]
     },
     'read_note': {
@@ -2050,6 +2115,135 @@ const scenes = {
     }
 };
 
+
+// 道具系统
+let inventory = [];
+let phoneUnread = 0;
+
+// 初始道具
+const startingItems = [
+    { id: 'note', name: '📜 生存指南', desc: '伪人识别方法和生存规则' },
+    { id: 'phone', name: '📱 手机', desc: '可以联系猎人和查看消息' }
+];
+
+function initInventory() {
+    inventory = [...startingItems];
+}
+
+function addItem(item) {
+    if (!inventory.find(i => i.id === item.id)) {
+        inventory.push(item);
+        phoneUnread++;
+        updatePhoneTime();
+    }
+}
+
+function showPhone() {
+    document.getElementById('phone-ui').style.display = 'block';
+    updatePhoneTime();
+    showPhoneTab('messages');
+}
+
+function closePhone() {
+    document.getElementById('phone-ui').style.display = 'none';
+}
+
+function updatePhoneTime() {
+    const now = new Date();
+    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('phone-time').textContent = time;
+}
+
+function showPhoneTab(tab) {
+    const content = document.getElementById('phone-content');
+    
+    // 更新标签状态
+    document.querySelectorAll('.phone-tab').forEach(t => t.classList.remove('active'));
+    
+    if (tab === 'messages') {
+        content.innerHTML = `
+            <div class="phone-msg-list">
+                <h3 style="color:#7a7aaa;margin-bottom:10px;">📬 消息</h3>
+                ${inventory.some(i => i.id === 'note') ? `
+                <div class="phone-msg unread">
+                    <strong>神秘人</strong><br>
+                    记住：伪人会模仿人类，但眨眼频率异常。不要单独去旧医院。
+                </div>` : ''}
+                ${inventory.some(i => i.id === 'hunter_contact') ? `
+                <div class="phone-msg unread">
+                    <strong>猎人组织</strong><br>
+                    我们已收到你的信号。旧医院地下室，今晚 10 点。
+                </div>` : ''}
+                ${inventory.length <= 2 ? `
+                <div class="phone-msg">
+                    <strong>系统</strong><br>
+                    欢迎来到伪人大本营。你的选择将决定命运。
+                </div>` : ''}
+            </div>
+        `;
+    } else if (tab === 'inventory') {
+        content.innerHTML = `
+            <div class="phone-inventory">
+                <h3 style="color:#7a7aaa;margin-bottom:10px;">🎒 道具</h3>
+                ${inventory.map(item => `
+                    <div class="phone-item">
+                        <div>
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-desc">${item.desc}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else if (tab === 'notes') {
+        content.innerHTML = `
+            <div class="phone-msg-list">
+                <h3 style="color:#7a7aaa;margin-bottom:10px;">📝 笔记</h3>
+                <div class="phone-msg">
+                    <strong>伪人识别方法</strong><br>
+                    1. 眨眼频率异常（太规律）<br>
+                    2. 说话重复关键词<br>
+                    3. 眼神没有情感<br>
+                    4. 行为机械化
+                </div>
+                <div class="phone-msg">
+                    <strong>生存规则</strong><br>
+                    1. 不要单独行动<br>
+                    2. 不要去旧医院<br>
+                    3. 发现被跟踪去人多的地方<br>
+                    4. 不要报警（他们不会相信）
+                </div>
+            </div>
+        `;
+    } else if (tab === 'map') {
+        content.innerHTML = `
+            <div class="phone-msg-list">
+                <h3 style="color:#7a7aaa;margin-bottom:10px;">🗺️ 地图</h3>
+                <div class="phone-msg">
+                    <strong>已知地点</strong><br>
+                    🏢 公司 - 起点<br>
+                    🏠 家 - 安全屋（暂时）<br>
+                    🏥 旧医院 - 伪人大本营（危险！）<br>
+                    🚇 地铁站 - 可逃离<br>
+                    🏪 商场 - 人多安全
+                </div>
+            </div>
+        `;
+    }
+}
+
+// 在菜单中添加手机按钮
+function addPhoneButton() {
+    const menuButtons = document.getElementById('menu-buttons');
+    if (!document.getElementById('phone-btn')) {
+        const phoneBtn = document.createElement('button');
+        phoneBtn.id = 'phone-btn';
+        phoneBtn.className = 'menu-btn';
+        phoneBtn.textContent = '📱 手机';
+        phoneBtn.onclick = (e) => { e.stopPropagation(); showPhone(); };
+        menuButtons.insertBefore(phoneBtn, menuButtons.firstChild);
+    }
+}
 let currentScene = 'start';
 let dialogueIndex = 0;
 let isTyping = false;
@@ -2060,6 +2254,13 @@ function showNameInput() {
     document.getElementById('start-btn').style.display = 'none';
     document.getElementById('name-input-container').classList.add('show');
     document.getElementById('player-name-input').focus();
+}
+
+function useItem(itemId) {
+    const item = inventory.find(i => i.id === itemId);
+    if (item) {
+        alert('使用了：' + item.name + '\n' + item.desc);
+    }
 }
 
 function confirmName() {
@@ -2083,6 +2284,8 @@ function confirmName() {
 }
 
 function startGame() {
+    initInventory();
+    addPhoneButton();
     showNameInput();
 }
 
@@ -2596,6 +2799,32 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// 场景氛围效果
+function applyAtmosphere(sceneId) {
+    const bg = document.getElementById('background');
+    bg.classList.remove('danger-zone', 'safe-zone');
+    
+    // 危险场景
+    if (['bg-secret', 'bg-ending'].includes(sceneId)) {
+        bg.classList.add('danger-zone');
+    }
+    // 安全场景
+    if (['bg-home'].includes(sceneId)) {
+        bg.classList.add('safe-zone');
+    }
+}
+
+// 增强版 loadScene
+const originalLoadScene = loadScene;
+loadScene = function(sceneId) {
+    const scene = scenes[sceneId];
+    if (!scene) return;
+    
+    applyAtmosphere(scene.bg);
+    originalLoadScene(sceneId);
+};
+
 </script>
 </body>
 </html>
