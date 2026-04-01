@@ -288,6 +288,31 @@ let isEasterEgg = false;
 let easterEggRole = '';
 
 // 彩蛋角色列表（伪人大本营世界观内）
+// 世界观数据（用户不可见）
+const worldData = {
+    characters: [
+        { name: '烛灯', alias: ['白夜叉'], stats: { SAN: 40, INS: 70, DIS: 30, LUK: 50, SUR: 80 }, background: '揭秘人' },
+        { name: '绫份', alias: ['白夜叉'], stats: { SAN: 45, INS: 60, DIS: 35, LUK: 55, SUR: 85 }, background: '槐安公寓' },
+        { name: '灼玥', alias: [], stats: { SAN: 55, INS: 65, DIS: 40, LUK: 50, SUR: 75 }, background: '自由' },
+        { name: '白桦', alias: [], stats: { SAN: 70, INS: 50, DIS: 45, LUK: 45, SUR: 80 }, background: '黎守' },
+        { name: '斯汀先生', alias: [], stats: { SAN: 60, INS: 75, DIS: 50, LUK: 40, SUR: 55 }, background: 'ABSC' },
+        { name: '艾尔伯特', alias: ['奇迹伪神', 'AT'], stats: { SAN: 30, INS: 90, DIS: 60, LUK: 85, SUR: 40 }, background: '艾尔伯特' },
+        { name: '安诺涅', alias: ['营长', '楼长'], stats: { SAN: 65, INS: 70, DIS: 55, LUK: 50, SUR: 60 }, background: '槐安公寓' },
+        { name: '非常玦蝶', alias: ['二营长'], stats: { SAN: 50, INS: 65, DIS: 45, LUK: 55, SUR: 70 }, background: '槐安公寓' },
+        { name: '温塔莎', alias: [], stats: { SAN: 35, INS: 80, DIS: 40, LUK: 45, SUR: 50 }, background: '表界' },
+        { name: '独允', alias: ['AI'], stats: { SAN: 20, INS: 95, DIS: 30, LUK: 40, SUR: 35 }, background: 'AI 核心' },
+        { name: '西瓜人', alias: ['西瓜'], stats: { SAN: 40, INS: 60, DIS: 70, LUK: 60, SUR: 55 }, background: '西瓜公司' },
+        { name: '兔仙', alias: ['兔子'], stats: { SAN: 55, INS: 65, DIS: 60, LUK: 65, SUR: 50 }, background: '茶居公寓' },
+        { name: '云蓝', alias: ['手偶'], stats: { SAN: 30, INS: 75, DIS: 50, LUK: 45, SUR: 40 }, background: '表界' },
+        { name: '江安', alias: ['温柔'], stats: { SAN: 60, INS: 55, DIS: 65, LUK: 55, SUR: 50 }, background: '表界' },
+        { name: '渔夫', alias: ['利维坦'], stats: { SAN: 25, INS: 85, DIS: 45, LUK: 50, SUR: 70 }, background: '里界' },
+        { name: 'AT', alias: ['奇迹'], stats: { SAN: 35, INS: 90, DIS: 55, LUK: 80, SUR: 45 }, background: '伪神' },
+        { name: '约斯密特', alias: ['傀儡'], stats: { SAN: 40, INS: 70, DIS: 60, LUK: 45, SUR: 50 }, background: '表界' },
+        { name: '赫卡忒', alias: ['Hecate'], stats: { SAN: 25, INS: 85, DIS: 35, LUK: 40, SUR: 60 }, background: '仿生人' }
+    ]
+};
+
+// 彩蛋角色（来自世界观文档）
 const easterEggRoles = {
     'AI': '别名·AI 核心',
     'AT': '奇迹伪神',
