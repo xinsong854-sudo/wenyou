@@ -2883,27 +2883,37 @@ function showCheckResult(check) {
     const ui = document.getElementById('check-ui');
     const attrLabels = { SAN: '理智', INS: '洞察', DIS: '伪装', LUK: '幸运', SUR: '生存' };
     
+    // 计算目标值（属性 + 技能）
+    const targetValue = check.attrValue + check.skillValue;
+    const effectiveDC = check.dc;
+    const successThreshold = targetValue - effectiveDC + 50;
+    
+    // 显示详细信息
     document.getElementById('check-description').textContent = check.description;
-    document.getElementById('check-attr').textContent = attrLabels[check.attribute] + ' ' + check.attrValue;
-    document.getElementById('check-skill').textContent = check.skill + ' ' + check.skillValue;
-    document.getElementById('check-dc').textContent = 'DC' + check.dc;
-    document.getElementById('check-roll').textContent = check.roll;
-    document.getElementById('check-target').textContent = check.targetValue;
+    document.getElementById('check-attr').textContent = attrLabels[check.attribute] + ': ' + check.attrValue;
+    document.getElementById('check-skill').textContent = check.skill + ': ' + check.skillValue;
+    document.getElementById('check-dc').textContent = 'DC: ' + check.dc;
+    document.getElementById('check-roll').textContent = '🎲 骰子：' + check.roll;
+    document.getElementById('check-target').textContent = '目标值：' + targetValue + ' (成功线：' + successThreshold + ')';
     
     const resultEl = document.getElementById('check-result');
+    let resultText = '';
     if (check.result === '大成功') {
-        resultEl.textContent = '🎉 大成功！';
+        resultText = '🎉 大成功！(骰子≤5)\n骰子 ' + check.roll + ' ≤ 成功线 ' + successThreshold + '，完美通过！';
         resultEl.style.color = '#ffe66d';
     } else if (check.result === '成功') {
-        resultEl.textContent = '✅ 成功';
+        resultText = '✅ 成功\n骰子 ' + check.roll + ' ≤ 成功线 ' + successThreshold + '，检定通过！';
         resultEl.style.color = '#4ecdc4';
     } else if (check.result === '失败') {
-        resultEl.textContent = '❌ 失败';
+        resultText = '❌ 失败\n骰子 ' + check.roll + ' > 成功线 ' + successThreshold + '，检定未通过';
         resultEl.style.color = '#ff6b6b';
     } else {
-        resultEl.textContent = '💀 大失败！';
+        resultText = '💀 大失败！(骰子≥96)\n骰子 ' + check.roll + '，灾难性失败！';
         resultEl.style.color = '#ff0000';
     }
+    resultEl.textContent = resultText;
+    resultEl.style.whiteSpace = 'pre-line';
+    resultEl.style.lineHeight = '1.6';
     
     ui.style.display = 'block';
     
