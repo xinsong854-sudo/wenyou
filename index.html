@@ -2309,6 +2309,118 @@ function updatePhoneTime() {
     document.getElementById('phone-time').textContent = time;
 }
 
+
+// 核心游戏函数
+let currentScene = 'start';
+let dialogueIndex = 0;
+let isTyping = false;
+let typingTimer = null;
+let currentText = '';
+
+function loadScene(sceneId) {
+    const scene = scenes[sceneId];
+    if (!scene) {
+        console.error('Scene not found:', sceneId);
+        return;
+    }
+    
+    currentScene = sceneId;
+    dialogueIndex = 0;
+    
+    // 设置背景
+    const bg = document.getElementById('background');
+    bg.className = 'bg-' + (scene.bg || 'office');
+    
+    // 检查是否是结局
+    if (scene.ending) {
+        showEnding(scene);
+        return;
+    }
+    
+    // 显示对话
+    showDialogue(scene.dialogues[0]);
+    
+    // 显示选项（如果有）
+    if (scene.choices) {
+        showChoices(scene.choices);
+    }
+}
+
+function showDialogue(dialogue) {
+    const speakerEl = document.getElementById('speaker-name');
+    const textEl = document.getElementById('dialogue-text');
+    
+    speakerEl.textContent = dialogue.speaker || '';
+    currentText = dialogue.text || '';
+    dialogueIndex = 0;
+    
+    // 简单显示，不打字机效果
+    textEl.innerHTML = currentText.replace(/
+/g, '<br>');
+    
+    document.getElementById('dialogue-box').style.display = 'block';
+    document.getElementById('continue-indicator').style.display = 'block';
+}
+
+function showChoices(choices) {
+    const container = document.getElementById('choices-container');
+    container.innerHTML = '';
+    
+    choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = choice.text;
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            if (choice.next) {
+                loadScene(choice.next);
+            }
+        };
+        container.appendChild(btn);
+    });
+    
+    container.style.display = 'flex';
+}
+
+function nextDialogue() {
+    const scene = scenes[currentScene];
+    if (!scene) return;
+    
+    // 隐藏选项
+    document.getElementById('choices-container').style.display = 'none';
+    
+    dialogueIndex++;
+    if (dialogueIndex < scene.dialogues.length) {
+        showDialogue(scene.dialogues[dialogueIndex]);
+        if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
+            showChoices(scene.choices);
+        }
+    }
+}
+
+function showEnding(scene) {
+    const endingScreen = document.getElementById('ending-screen');
+    const endingTitle = document.getElementById('ending-title');
+    const endingContent = document.getElementById('ending-content');
+    
+    let endingText = scene.endingText.replace(/你/g, playerName);
+    let endingTitleText = scene.endingTitle.replace(/你/g, playerName);
+    
+    if (isEasterEgg) {
+        endingTitleText = '🎉 ' + endingTitleText;
+        endingText = '【彩蛋身份：' + easterEggRoles[easterEggRole] + '】\n\n' + endingText;
+    }
+    
+    const typeIcons = { 'bad': '💀', 'normal': '🌅', 'true': '⭐' };
+    const icon = typeIcons[scene.endingType] || '🎭';
+    
+    endingTitle.innerHTML = icon + ' ' + endingTitleText;
+    endingTitle.className = 'ending-' + scene.endingType;
+    endingContent.innerHTML = endingText.replace(/\n/g, '<br>');
+    
+    endingScreen.style.display = 'flex';
+}
+
 function showPhoneTab(tab) {
     const content = document.getElementById('phone-content');
     
