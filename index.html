@@ -2340,9 +2340,6 @@ function loadScene(sceneId) {
     // 如果只有一句对话且有选项，直接显示
     if (scene.dialogues.length === 1 && scene.choices) {
         showChoices(scene.choices);
-        if (sceneId === 'start') {
-            addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
-        }
     }
 }
 
@@ -2531,13 +2528,6 @@ function addPhoneButton() {
 }
 
 // 核心游戏函数
-
-
-
-
-
-
-
 
 
 </script>
