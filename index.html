@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伪人大本营 - 互动视觉小说</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #game-container {
+            width: 100%;
+            height: 100%;
+            max-width: 1280px;
+            max-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            overflow: hidden;
+        }
+
+        /* 背景层 */
+        #background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: background 0.5s ease;
+            z-index: 1;
+        }
+
+        .bg-office {
+            background: linear-gradient(180deg, #2d3436 0%, #1a1a2e 100%);
+        }
+
+        .bg-street {
+            background: linear-gradient(180deg, #0c0c0c 0%, #1a1a2e 100%);
+        }
+
+        .bg-home {
+            background: linear-gradient(180deg, #2d3436 0%, #0c0c0c 100%);
+        }
+
+        .bg-hospital {
+            background: linear-gradient(180deg, #3a3a5c 0%, #1a1a2e 100%);
+        }
+
+        .bg-secret {
+            background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%);
+        }
+
+        .bg-ending {
+            background: linear-gradient(180deg, #000000 0%, #1a1a2e 100%);
+        }
+
+        /* 角色立绘层 */
+        #characters {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .character {
+            position: absolute;
+            bottom: 20%;
+            width: 200px;
+            height: 400px;
+            background: linear-gradient(180deg, #4a4a6a 0%, #2a2a4a 100%);
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .character.left {
+            left: 15%;
+        }
+
+        .character.center {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 450px;
+        }
+
+        .character.right {
+            right: 15%;
+        }
+
+        .character .name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .character .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #6a6a8a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        /* 对话框 */
+        #dialogue-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1000px;
+            background: linear-gradient(180deg, rgba(20,20,40,0.95) 0%, rgba(10,10,30,0.98) 100%);
+            border: 2px solid #4a4a6a;
+            border-radius: 15px;
+            padding: 20px 30px;
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        #speaker-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #7a7aaa;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        #dialogue-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #fff;
+            min-height: 80px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        #continue-indicator {
+            position: absolute;
+            bottom: 15px;
+            right: 30px;
+            font-size: 24px;
+            color: #7a7aaa;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* 选项按钮 */
+        #choices-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(180deg, #3a3a5a 0%, #2a2a4a 100%);
+            border: 2px solid #5a5a7a;
+            border-radius: 10px;
+            padding: 20px 30px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .choice-btn:hover {
+            background: linear-gradient(180deg, #4a4a6a 0%, #3a3a5a 100%);
+            border-color: #7a7aaa;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+        }
+
+        .choice-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 菜单按钮 */
+        #menu-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+            display: flex;
+            gap: 10px;
+        }
+
+        .menu-btn {
+            background: rgba(30,30,50,0.8);
+            border: 1px solid #5a5a7a;
+            border-radius: 5px;
+            padding: 8px 15px;
+            color: #aaa;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background: rgba(50,50,80,0.9);
+            color: #fff;
+            border-color: #7a7aaa;
+        }
+
+        /* 存档/读档面板 */
+        #save-load-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, rgba(20,20,40,0.98) 0%, rgba(10,10,30,0.99) 100%);
+            border: 2px solid #5a5a7a;
+            border-radius: 15px;
+            padding: 30px;
+            z-index: 40;
+            display: none;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        #save-load-panel h2 {
+            color: #7a7aaa;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .save-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .save-slot {
+            background: rgba(30,30,50,0.6);
+            border: 1px solid #4a4a6a;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 100px;
+        }
+
+        .save-slot:hover {
+            background: rgba(50,50,80,0.8);
+            border-color: #6a6a8a;
+        }
+
+        .save-slot .slot-number {
+            color: #7a7aaa;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .save-slot .slot-info {
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .save-slot .slot-time {
+            color: #5a5a7a;
+            font-size: 11px;
+        }
+
+        .panel-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .panel-btn {
+            background: linear-gradient(180deg, #3a3a5a 0%, #2a2a4a 100%);
+            border: 1px solid #5a5a7a;
+            border-radius: 8px;
+            padding: 10px 25px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .panel-btn:hover {
+            background: linear-gradient(180deg, #4a4a6a 0%, #3a3a5a 100%);
+            border-color: #7a7aaa;
+        }
+
+        .panel-btn.close {
+            background: linear-gradient(180deg, #5a3a3a 0%, #4a2a2a 100%);
+        }
+
+        .panel-btn.close:hover {
+            background: linear-gradient(180deg, #6a4a4a 0%, #5a3a3a 100%);
+        }
+
+        /* 标题画面 */
+        #title-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #title-screen h1 {
+            font-size: 64px;
+            color: #7a7aaa;
+            text-shadow: 0 0 30px rgba(122,122,170,0.5);
+            margin-bottom: 20px;
+            letter-spacing: 10px;
+        }
+
+        #title-screen .subtitle {
+            font-size: 24px;
+            color: #5a5a7a;
+            margin-bottom: 50px;
+            letter-spacing: 5px;
+        }
+
+        .title-btn {
+            background: linear-gradient(180deg, #3a3a5a 0%, #2a2a4a 100%);
+            border: 2px solid #5a5a7a;
+            border-radius: 10px;
+            padding: 15px 50px;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .title-btn:hover {
+            background: linear-gradient(180deg, #4a4a6a 0%, #3a3a5a 100%);
+            border-color: #7a7aaa;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(122,122,170,0.3);
+        }
+
+        /* 结局画面 */
+        #ending-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        #ending-screen h2 {
+            font-size: 48px;
+            color: #7a7aaa;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #ending-screen .ending-text {
+            font-size: 20px;
+            line-height: 2;
+            color: #aaa;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            #game-container {
+                max-height: 100vh;
+            }
+
+            #title-screen h1 {
+                font-size: 36px;
+                letter-spacing: 5px;
+            }
+
+            #title-screen .subtitle {
+                font-size: 16px;
+            }
+
+            .title-btn {
+                padding: 12px 30px;
+                font-size: 16px;
+                min-width: 150px;
+            }
+
+            .character {
+                width: 120px;
+                height: 250px;
+            }
+
+            .character.center {
+                width: 150px;
+                height: 300px;
+            }
+
+            #dialogue-box {
+                width: 95%;
+                padding: 15px 20px;
+                bottom: 10px;
+            }
+
+            #speaker-name {
+                font-size: 16px;
+            }
+
+            #dialogue-text {
+                font-size: 15px;
+                min-height: 60px;
+            }
+
+            .choice-btn {
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+
+            #save-load-panel {
+                padding: 20px;
+            }
+
+            .save-slots {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 特效 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* 隐藏元素 */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- 标题画面 -->
+        <div id="title-screen">
+            <h1>伪人大本营</h1>
+            <div class="subtitle">他们就在你身边...</div>
+            <button class="title-btn" onclick="game.start()">开始游戏</button>
+            <button class="title-btn" onclick="game.showLoadPanel()">读取存档</button>
+            <button class="title-btn" onclick="game.showCredits()">制作信息</button>
+        </div>
+
+        <!-- 游戏主界面 -->
+        <div id="background" class="bg-office"></div>
+        
+        <div id="characters"></div>
+        
+        <div id="dialogue-box" class="hidden">
+            <div id="speaker-name"></div>
+            <div id="dialogue-text"></div>
+            <div id="continue-indicator">▼</div>
+        </div>
+
+        <div id="choices-container"></div>
+
+        <div id="menu-buttons" class="hidden">
+            <button class="menu-btn" onclick="game.showSavePanel()">存档</button>
+            <button class="menu-btn" onclick="game.showLoadPanel()">读档</button>
+            <button class="menu-btn" onclick="game.toTitle()">标题</button>
+        </div>
+
+        <!-- 存档/读档面板 -->
+        <div id="save-load-panel">
+            <h2 id="panel-title">存档</h2>
+            <div class="save-slots" id="save-slots"></div>
+            <div class="panel-buttons">
+                <button class="panel-btn close" onclick="game.closePanel()">关闭</button>
+            </div>
+        </div>
+
+        <!-- 结局画面 -->
+        <div id="ending-screen">
+            <h2 id="ending-title"></h2>
+            <div class="ending-text" id="ending-text"></div>
+            <button class="title-btn" onclick="game.toTitle()">返回标题</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏数据
+        const gameData = {
+            currentScene: 'start',
+            dialogueIndex: 0,
+            flags: {},
+            inventory: [],
+            saveSlots: 5
+        };
+
+        // 场景数据
+        const scenes = {
+            'start': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '？？？', text: '你...能听见我说话吗？' },
+                    { speaker: '？？？', text: '太好了...看来信号还能传过来。' },
+                    { speaker: '我', text: '谁？谁在说话？' },
+                    { speaker: '神秘人', text: '没时间解释了。听着，你周围有人不是人类。' },
+                    { speaker: '我', text: '什么？你在开玩笑吗？' },
+                    { speaker: '神秘人', text: '我希望是玩笑。但他们伪装得太完美了，连我都差点没发现。' },
+                    { speaker: '神秘人', text: '记住：观察他们的眼睛。伪人的眼睛...会在特定光线下反射异常的光芒。' },
+                    { speaker: '神秘人', text: '我先挂了，有人来了。保护好自己。' }
+                ],
+                choices: [
+                    { text: '认为这是恶作剧，继续正常工作', next: 'office_normal' },
+                    { text: '开始警惕，观察周围的人', next: 'office_alert' }
+                ]
+            },
+            'office_normal': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '我', text: '真是的，现在的骚扰电话越来越离谱了。' },
+                    { speaker: '张明', text: '林晓，发什么呆呢？开会了！' },
+                    { speaker: '我', text: '啊，来了！' },
+                    { speaker: '我', text: '（张明是我的同事，平时人挺好的...应该不会有什么问题吧？）' }
+                ],
+                choices: [
+                    { text: '信任张明，和他一起开会', next: 'meeting_zhang' },
+                    { text: '找借口避开，独自调查', next: 'investigate_alone' }
+                ]
+            },
+            'office_alert': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '我', text: '伪人...真的存在吗？' },
+                    { speaker: '李雨', text: '林晓，你怎么脸色这么差？不舒服吗？' },
+                    { speaker: '我', text: '（李雨是我的邻居，总是很关心我...）' },
+                    { speaker: '我', text: '没事，可能昨晚没睡好。' },
+                    { speaker: '李雨', text: '那要不要去王医生那里看看？他就在社区诊所。' }
+                ],
+                choices: [
+                    { text: '接受建议，去找王医生', next: 'hospital_wang' },
+                    { text: '拒绝，继续观察李雨', next: 'observe_li' }
+                ]
+            },
+            'meeting_zhang': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '张明', text: '好了，今天的会议就到这里。大家回去工作吧。' },
+                    { speaker: '我', text: '（会议进行中，我注意到张明的行为有些奇怪...）' },
+                    { speaker: '我', text: '（他眨眼的频率太规律了，就像...设定好的程序？）' },
+                    { speaker: '张明', text: '林晓，你留下来一下。' }
+                ],
+                choices: [
+                    { text: '留下', next: 'zhang_confront' },
+                    { text: '找借口离开', next: 'escape_meeting' }
+                ]
+            },
+            'investigate_alone': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '我得找个安静的地方想想。' },
+                    { speaker: '我', text: '（走在街上，我仔细观察着每一个路人...）' },
+                    { speaker: '我', text: '等等，那个人...他的眼睛...' },
+                    { speaker: '神秘人', text: '别盯着看！会被发现的！' }
+                ],
+                choices: [
+                    { text: '立刻移开视线', next: 'street_avoid' },
+                    { text: '继续观察，收集更多信息', next: 'street_observe' }
+                ]
+            },
+            'hospital_wang': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '王医生', text: '请坐，林小姐。李雨说你不太舒服？' },
+                    { speaker: '我', text: '（王医生看起来很和蔼，但...）' },
+                    { speaker: '我', text: '（他的诊室里有很多奇怪的文件，上面画着...人体结构图？）' },
+                    { speaker: '王医生', text: '来，让我看看你的眼睛。' }
+                ],
+                choices: [
+                    { text: '配合检查', next: 'wang_exam' },
+                    { text: '拒绝，找借口离开', next: 'wang_escape' }
+                ]
+            },
+            'observe_li': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（回到家，我从窗户观察着李雨的家...）' },
+                    { speaker: '我', text: '（她在做什么？那些奇怪的仪器是什么？）' },
+                    { speaker: '李雨', text: '林晓？你在看什么？' },
+                    { speaker: '我', text: '（她什么时候发现的？！）' }
+                ],
+                choices: [
+                    { text: '坦白询问', next: 'li_confront' },
+                    { text: '假装没事', next: 'li_pretend' }
+                ]
+            },
+            'zhang_confront': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '张明', text: '你知道吗，林晓。你最近...很爱观察人。' },
+                    { speaker: '我', text: '（他的声音...为什么变得这么冰冷？）' },
+                    { speaker: '张明', text: '我们注意到了。但你不用担心。' },
+                    { speaker: '张明', text: '很快，你也会和我们一样。' }
+                ],
+                choices: [
+                    { text: '逃跑', next: 'escape_zhang' },
+                    { text: '质问他在说什么', next: 'zhang_truth' }
+                ]
+            },
+            'escape_meeting': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我找了个借口离开了公司...）' },
+                    { speaker: '我', text: '张明最后那个眼神...绝对有问题。' },
+                    { speaker: '神秘人', text: '你做得对。他是伪人。' },
+                    { speaker: '我', text: '你？！你怎么又出现了？' },
+                    { speaker: '神秘人', text: '没时间解释了。伪人大本营就在城市地下。你必须找到入口。' }
+                ],
+                choices: [
+                    { text: '询问入口位置', next: 'secret_entrance' },
+                    { text: '质疑神秘人的身份', next: 'mystery_identity' }
+                ]
+            },
+            'street_avoid': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我立刻移开视线，装作什么都没看见...）' },
+                    { speaker: '我', text: '（但那个人朝我走过来了...）' },
+                    { speaker: '？？？', text: '你看到了，对吧？' }
+                ],
+                choices: [
+                    { text: '否认', next: 'street_deny' },
+                    { text: '承认并询问', next: 'street_ask' }
+                ]
+            },
+            'street_observe': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我继续观察，发现那个人的眼睛在路灯下确实有异常反光...）' },
+                    { speaker: '我', text: '（突然，他转头看向了我...）' },
+                    { speaker: '？？？', text: '你在看什么？' },
+                    { speaker: '我', text: '（他的表情...完全不像人类...）' }
+                ],
+                choices: [
+                    { text: '逃跑', next: 'street_run' },
+                    { text: '尝试交流', next: 'street_talk' }
+                ]
+            },
+            'wang_exam': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '王医生', text: '放松...很快就好了。' },
+                    { speaker: '我', text: '（他拿出一个奇怪的仪器，靠近我的眼睛...）' },
+                    { speaker: '王医生', text: '嗯...果然。你有成为我们的潜质。' },
+                    { speaker: '我', text: '什么？！' }
+                ],
+                choices: [
+                    { text: '反抗', next: 'wang_fight' },
+                    { text: '假装配合，寻找机会', next: 'wang_fake' }
+                ]
+            },
+            'wang_escape': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我找了个借口逃离了诊所...）' },
+                    { speaker: '我', text: '王医生最后那个笑容...太诡异了。' },
+                    { speaker: '神秘人', text: '你逃过一劫。王医生是伪人的高层。' },
+                    { speaker: '我', text: '高层？！那李雨呢？' },
+                    { speaker: '神秘人', text: '她...比较复杂。你可能需要她的帮助。' }
+                ],
+                choices: [
+                    { text: '去找李雨', next: 'find_li' },
+                    { text: '继续独自调查', next: 'alone_investigate' }
+                ]
+            },
+            'li_confront': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '李雨', text: '（她沉默了一会儿）...你都看到了？' },
+                    { speaker: '我', text: '（她承认了？！）' },
+                    { speaker: '李雨', text: '我不是伪人。我在调查他们。' },
+                    { speaker: '李雨', text: '听着，伪人大本营的入口在旧医院地下室。我需要你的帮助。' }
+                ],
+                choices: [
+                    { text: '相信她，一起行动', next: 'li_ally' },
+                    { text: '怀疑她，保持距离', next: 'li_doubt' }
+                ]
+            },
+            'li_pretend': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '没什么，就是看看风景。' },
+                    { speaker: '李雨', text: '（她盯着我看了一会儿）...是吗。早点休息吧。' },
+                    { speaker: '我', text: '（她走了...但我觉得她知道了什么。）' },
+                    { speaker: '神秘人', text: '你做得好。李雨可能是伪人，也可能是猎人。现在还无法确定。' }
+                ],
+                choices: [
+                    { text: '联系神秘人获取更多信息', next: 'contact_mystery' },
+                    { text: '自己制定计划', next: 'make_plan' }
+                ]
+            },
+            'escape_zhang': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我拼命逃跑，不敢回头...）' },
+                    { speaker: '张明', text: '（远处传来他的声音）你逃不掉的，林晓...' },
+                    { speaker: '我', text: '（我必须找个地方躲起来...）' }
+                ],
+                choices: [
+                    { text: '躲进地铁站', next: 'subway_hide' },
+                    { text: '回家锁好门', next: 'home_lock' }
+                ]
+            },
+            'zhang_truth': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '张明', text: '人类太脆弱了。疾病、衰老、死亡...' },
+                    { speaker: '张明', text: '我们不一样。我们完美，我们永恒。' },
+                    { speaker: '张明', text: '加入我们吧，林晓。成为更好的人类。' },
+                    { speaker: '我', text: '（他伸出手...那只手...皮肤下有东西在蠕动...）' }
+                ],
+                choices: [
+                    { text: '接受邀请', next: 'ending_assimilate' },
+                    { text: '拒绝并攻击', next: 'zhang_attack' }
+                ]
+            },
+            'secret_entrance': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '神秘人', text: '旧医院地下室。但那里很危险。' },
+                    { speaker: '我', text: '你为什么知道这么多？你到底是谁？' },
+                    { speaker: '神秘人', text: '...我曾经和你一样。但现在，我回不去了。' },
+                    { speaker: '神秘人', text: '去吧。真相在等着你。' }
+                ],
+                choices: [
+                    { text: '前往旧医院', next: 'hospital_base' },
+                    { text: '要求神秘人同行', next: 'mystery_together' }
+                ]
+            },
+            'mystery_identity': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '神秘人', text: '我是...曾经的受害者。' },
+                    { speaker: '神秘人', text: '我被他们改造过，但逃出来了。' },
+                    { speaker: '我', text: '改造？！' },
+                    { speaker: '神秘人', text: '伪人不是天生的。他们是人类被改造后的产物。' }
+                ],
+                choices: [
+                    { text: '感到恐惧', next: 'fear_truth' },
+                    { text: '决心对抗', next: 'determine_fight' }
+                ]
+            },
+            'street_deny': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '看到什么？我只是在走路。' },
+                    { speaker: '？？？', text: '（他盯着我看了一会儿）...最好是这样。' },
+                    { speaker: '我', text: '（他走了...但我感觉他在监视我。）' }
+                ],
+                choices: [
+                    { text: '加快脚步离开', next: 'street_leave' },
+                    { text: '跟踪他', next: 'street_follow' }
+                ]
+            },
+            'street_ask': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '你的眼睛...不太正常。' },
+                    { speaker: '？？？', text: '（他笑了）观察力不错。' },
+                    { speaker: '？？？', text: '既然你发现了，有两个选择：加入我们，或者消失。' }
+                ],
+                choices: [
+                    { text: '假装考虑，寻找机会', next: 'fake_consider' },
+                    { text: '直接拒绝', next: 'direct_refuse' }
+                ]
+            },
+            'street_run': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我转身就跑...）' },
+                    { speaker: '？？？', text: '跑吧，跑吧。但你逃不掉的。' },
+                    { speaker: '我', text: '（他的声音...从四面八方传来...）' }
+                ],
+                choices: [
+                    { text: '躲进小巷', next: 'alley_hide' },
+                    { text: '跑向人多的地方', next: 'crowd_safety' }
+                ]
+            },
+            'street_talk': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '你...是什么？' },
+                    { speaker: '？？？', text: '我们是进化。是未来。' },
+                    { speaker: '？？？', text: '人类太脆弱了。我们会取代他们。' },
+                    { speaker: '我', text: '（他说话时，脸部...在轻微变形...）' }
+                ],
+                choices: [
+                    { text: '录音取证', next: 'record_evidence' },
+                    { text: '悄悄离开', next: 'quiet_leave' }
+                ]
+            },
+            'wang_fight': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '我', text: '（我推开他，抓起桌上的剪刀...）' },
+                    { speaker: '王医生', text: '（他笑了）暴力？真是人类的做法。' },
+                    { speaker: '王医生', text: '但你打不过我的。' }
+                ],
+                choices: [
+                    { text: '殊死一搏', next: 'fight_death' },
+                    { text: '寻找逃生路线', next: 'find_exit' }
+                ]
+            },
+            'wang_fake': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '我', text: '（我假装配合，等待机会...）' },
+                    { speaker: '王医生', text: '乖...很快就不疼了。' },
+                    { speaker: '我', text: '（他转身去拿仪器...就是现在！）' }
+                ],
+                choices: [
+                    { text: '趁机逃跑', next: 'fake_escape' },
+                    { text: '袭击他', next: 'fake_attack' }
+                ]
+            },
+            'find_li': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我来到李雨家门口...）' },
+                    { speaker: '我', text: '（门虚掩着，里面有打斗的痕迹...）' },
+                    { speaker: '李雨', text: '（虚弱地）...林晓？快...走...' }
+                ],
+                choices: [
+                    { text: '救她', next: 'save_li' },
+                    { text: '先确保自己安全', next: 'self_safety' }
+                ]
+            },
+            'alone_investigate': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我一个人继续调查...）' },
+                    { speaker: '我', text: '（根据神秘人的线索，我来到了旧城区...）' },
+                    { speaker: '我', text: '（这里有一座废弃的医院...）' }
+                ],
+                choices: [
+                    { text: '进入医院', next: 'hospital_base' },
+                    { text: '先观察周围环境', next: 'observe_area' }
+                ]
+            },
+            'li_ally': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '李雨', text: '太好了，你愿意相信我。' },
+                    { speaker: '李雨', text: '伪人大本营就在旧医院地下。我侦查过了。' },
+                    { speaker: '李雨', text: '我们今晚就行动。' },
+                    { speaker: '我', text: '（看着她坚定的眼神，我决定相信她...）' }
+                ],
+                choices: [
+                    { text: '准备行动', next: 'prepare_action' },
+                    { text: '要求更多情报', next: 'more_intel' }
+                ]
+            },
+            'li_doubt': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '我需要时间考虑。' },
+                    { speaker: '李雨', text: '（她点点头）理解。但时间不多了。' },
+                    { speaker: '我', text: '（她离开后，我收到神秘人的消息...）' },
+                    { speaker: '神秘人', text: '李雨可能是猎人组织的。他们也在对抗伪人。' }
+                ],
+                choices: [
+                    { text: '联系李雨，决定合作', next: 'li_ally' },
+                    { text: '独自行动', next: 'alone_investigate' }
+                ]
+            },
+            'contact_mystery': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '神秘人', text: '伪人通过一个叫做"同化"的过程制造新成员。' },
+                    { speaker: '神秘人', text: '被同化的人类会失去记忆，成为他们的一员。' },
+                    { speaker: '我', text: '太可怕了...有办法逆转吗？' },
+                    { speaker: '神秘人', text: '...我不知道。但猎人组织在研究。' }
+                ],
+                choices: [
+                    { text: '寻找猎人组织', next: 'find_hunters' },
+                    { text: '直接对抗伪人', next: 'direct_fight' }
+                ]
+            },
+            'make_plan': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我制定了计划...）' },
+                    { speaker: '我', text: '首先要收集更多证据，然后报警...）' },
+                    { speaker: '我', text: '（但当我打开电脑，发现所有关于伪人的资料都被删除了...）' },
+                    { speaker: '？？？', text: '你以为你能逃掉吗？' }
+                ],
+                choices: [
+                    { text: '转身面对', next: 'face_intruder' },
+                    { text: '从窗户逃跑', next: 'window_escape' }
+                ]
+            },
+            'subway_hide': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我躲进地铁站，混入人群...）' },
+                    { speaker: '我', text: '（人多的地方应该安全...）' },
+                    { speaker: '我', text: '（但等等...这些人里，有多少是伪人？）' }
+                ],
+                choices: [
+                    { text: '继续躲藏', next: 'keep_hiding' },
+                    { text: '尝试离开城市', next: 'leave_city' }
+                ]
+            },
+            'home_lock': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我回到家，锁好所有门窗...）' },
+                    { speaker: '我', text: '（但我知道这不够...）' },
+                    { speaker: '？？？', text: '（敲门声）林晓，是我，张明。' },
+                    { speaker: '我', text: '（他怎么找到这里的？！）' }
+                ],
+                choices: [
+                    { text: '不开门', next: 'dont_open' },
+                    { text: '开门对峙', next: 'open_confront' }
+                ]
+            },
+            'ending_assimilate': {
+                bg: 'bg-ending',
+                dialogues: [
+                    { speaker: '我', text: '（我握住他的手...）' },
+                    { speaker: '我', text: '（一股奇异的感觉传遍全身...）' },
+                    { speaker: '张明', text: '欢迎加入，新同伴。' },
+                    { speaker: '我', text: '（我的意识开始模糊...但奇怪的是，我并不害怕...）' }
+                ],
+                ending: true,
+                endingType: 'bad',
+                endingTitle: '【结局：同化】',
+                endingText: '你选择了成为伪人的一员。曾经的人类身份逐渐淡去，你获得了"完美"的身体和永恒的生命。但每当夜深人静，你总会想起作为人类时的温暖...那些情感，那些记忆，真的值得放弃吗？'
+            },
+            'zhang_attack': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '我', text: '（我抓起桌上的裁纸刀，朝他刺去...）' },
+                    { speaker: '张明', text: '（他轻松躲开）真是顽固。' },
+                    { speaker: '张明', text: '那就别怪我们不客气了。' }
+                ],
+                choices: [
+                    { text: '继续战斗', next: 'continue_fight' },
+                    { text: '求饶', next: 'beg_merge' }
+                ]
+            },
+            'hospital_base': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '我', text: '（我来到了旧医院地下室...）' },
+                    { speaker: '我', text: '（这里...是一个巨大的实验室...）' },
+                    { speaker: '我', text: '（无数培养舱中，漂浮着...人类？）' },
+                    { speaker: '王医生', text: '欢迎来到真相之地，林晓。' }
+                ],
+                choices: [
+                    { text: '质问他们', next: 'confront_truth' },
+                    { text: '悄悄收集证据', next: 'collect_evidence' },
+                    { text: '试图破坏设施', next: 'sabotage' }
+                ]
+            },
+            'mystery_together': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '神秘人', text: '（沉默良久）...好吧。' },
+                    { speaker: '神秘人', text: '（他摘下面具...那张脸...）' },
+                    { speaker: '我', text: '你...你也是伪人？！' },
+                    { speaker: '神秘人', text: '我曾经是。但我找回了人性。' }
+                ],
+                choices: [
+                    { text: '相信他', next: 'trust_mystery' },
+                    { text: '怀疑是陷阱', next: 'suspect_trap' }
+                ]
+            },
+            'fear_truth': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我感到一阵眩晕...）' },
+                    { speaker: '我', text: '（这意味着...任何人都可能变成伪人...）' },
+                    { speaker: '神秘人', text: '振作起来。现在你知道真相了。' },
+                    { speaker: '神秘人', text: '选择吧：逃避，还是战斗？' }
+                ],
+                choices: [
+                    { text: '选择战斗', next: 'choose_fight' },
+                    { text: '选择逃避', next: 'choose_escape' }
+                ]
+            },
+            'determine_fight': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我握紧拳头）我不会让他们得逞的。' },
+                    { speaker: '神秘人', text: '很好。猎人组织会帮助你。' },
+                    { speaker: '神秘人', text: '去旧医院，那里有他们的基地。' }
+                ],
+                choices: [
+                    { text: '前往旧医院', next: 'hospital_base' }
+                ]
+            },
+            'alley_hide': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我躲进一条阴暗的小巷...）' },
+                    { speaker: '我', text: '（脚步声渐渐远去...）' },
+                    { speaker: '我', text: '（但我被困住了...）' }
+                ],
+                choices: [
+                    { text: '等待天亮', next: 'wait_morning' },
+                    { text: '尝试联系神秘人', next: 'contact_mystery' }
+                ]
+            },
+            'crowd_safety': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我跑向商业区，混入人群...）' },
+                    { speaker: '我', text: '（伪人应该不敢在这么多人面前动手...）' },
+                    { speaker: '我', text: '（但等等...如果人群中也有伪人呢？）' }
+                ],
+                choices: [
+                    { text: '继续观察人群', next: 'observe_crowd' },
+                    { text: '找地方报警', next: 'call_police' }
+                ]
+            },
+            'record_evidence': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我悄悄打开手机录音...）' },
+                    { speaker: '？？？', text: '（他似乎察觉到了）你在干什么？' },
+                    { speaker: '我', text: '没...没什么...' }
+                ],
+                choices: [
+                    { text: '继续录音', next: 'keep_record' },
+                    { text: '收起手机', next: 'put_phone' }
+                ]
+            },
+            'quiet_leave': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我慢慢后退，然后转身离开...）' },
+                    { speaker: '？？？', text: '（没有阻拦）' },
+                    { speaker: '我', text: '（我逃过一劫...但这只是开始。）' }
+                ],
+                choices: [
+                    { text: '回家', next: 'go_home' },
+                    { text: '去警局', next: 'go_police' }
+                ]
+            },
+            'fight_death': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '我', text: '（我用尽全身力气刺向他...）' },
+                    { speaker: '王医生', text: '（他抓住我的手腕）太弱了。' },
+                    { speaker: '王医生', text: '但这份勇气...值得赞赏。' }
+                ],
+                choices: [
+                    { text: '继续挣扎', next: 'continue_struggle' },
+                    { text: '放弃抵抗', next: 'give_up' }
+                ]
+            },
+            'find_exit': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '我', text: '（我寻找着出口...）' },
+                    { speaker: '王医生', text: '（他挡在门口）想去哪？' },
+                    { speaker: '我', text: '（完了...）' }
+                ],
+                choices: [
+                    { text: '从窗户逃跑', next: 'window_run' },
+                    { text: '和他谈判', next: 'negotiate' }
+                ]
+            },
+            'fake_escape': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '我', text: '（我冲向门口...）' },
+                    { speaker: '王医生', text: '（他笑了）你以为这样就能逃掉？' },
+                    { speaker: '我', text: '（但我已经跑到了走廊...）' }
+                ],
+                choices: [
+                    { text: '继续跑', next: 'keep_running' },
+                    { text: '躲起来', next: 'hide_corridor' }
+                ]
+            },
+            'fake_attack': {
+                bg: 'bg-hospital',
+                dialogues: [
+                    { speaker: '我', text: '（我拿起仪器砸向他...）' },
+                    { speaker: '王医生', text: '（他被打中，踉跄后退）你...！' },
+                    { speaker: '我', text: '（我趁机逃跑...）' }
+                ],
+                choices: [
+                    { text: '逃离医院', next: 'escape_hospital' }
+                ]
+            },
+            'save_li': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我冲进去，扶起李雨...）' },
+                    { speaker: '李雨', text: '（她递给我一个 U 盘）这是...伪人的名单...快...' },
+                    { speaker: '李雨', text: '（她昏了过去...）' }
+                ],
+                choices: [
+                    { text: '带她去医院', next: 'take_hospital' },
+                    { text: '先看 U 盘内容', next: 'check_usb' }
+                ]
+            },
+            'self_safety': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我犹豫了一下，最终选择离开...）' },
+                    { speaker: '我', text: '（对不起，李雨...但我必须先保证自己的安全...）' },
+                    { speaker: '神秘人', text: '你做了理智的选择。但现在，你失去了一个可能的盟友。' }
+                ],
+                choices: [
+                    { text: '继续独自调查', next: 'alone_investigate' },
+                    { text: '后悔，返回救人', next: 'regret_return' }
+                ]
+            },
+            'observe_area': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我观察着医院周围...）' },
+                    { speaker: '我', text: '（有几个人在门口巡逻...）' },
+                    { speaker: '我', text: '（我需要想个办法进去...）' }
+                ],
+                choices: [
+                    { text: '等天黑再行动', next: 'wait_night' },
+                    { text: '找其他入口', next: 'find_entrance' }
+                ]
+            },
+            'prepare_action': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '李雨', text: '（她递给我一些装备）这些可能会用到。' },
+                    { speaker: '李雨', text: '记住，我们的目标是获取证据，不是硬拼。' },
+                    { speaker: '我', text: '明白了。' }
+                ],
+                choices: [
+                    { text: '出发', next: 'hospital_base' }
+                ]
+            },
+            'more_intel': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '李雨', text: '（她给我看了一些文件）伪人已经渗透到社会的各个层面。' },
+                    { speaker: '李雨', text: '政府、企业、医院...都有他们的人。' },
+                    { speaker: '我', text: '（我感到一阵寒意...）' }
+                ],
+                choices: [
+                    { text: '准备行动', next: 'prepare_action' },
+                    { text: '感到绝望', next: 'feel_despair' }
+                ]
+            },
+            'find_hunters': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（根据神秘人的指引，我来到了一个废弃的仓库...）' },
+                    { speaker: '？？？', text: '（黑暗中走出一个人）你就是新来的？' },
+                    { speaker: '我', text: '（这是...猎人组织的基地？）' }
+                ],
+                choices: [
+                    { text: '加入猎人组织', next: 'join_hunters' },
+                    { text: '只寻求合作', next: 'only_cooperate' }
+                ]
+            },
+            'direct_fight': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我决定直接对抗伪人...）' },
+                    { speaker: '我', text: '（但我一个人...能做到什么？）' },
+                    { speaker: '神秘人', text: '勇气可嘉，但你需要帮助。' }
+                ],
+                choices: [
+                    { text: '接受帮助', next: 'accept_help' },
+                    { text: '坚持独自行动', next: 'insist_alone' }
+                ]
+            },
+            'face_intruder': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我转身...是李雨。）' },
+                    { speaker: '李雨', text: '别紧张。我是来帮你的。' },
+                    { speaker: '李雨', text: '伪人已经盯上你了。你必须离开这里。' }
+                ],
+                choices: [
+                    { text: '跟她走', next: 'go_with_li' },
+                    { text: '拒绝', next: 'refuse_li' }
+                ]
+            },
+            'window_escape': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我爬出窗户，沿着防火梯往下...）' },
+                    { speaker: '我', text: '（到了地面，我拼命奔跑...）' },
+                    { speaker: '我', text: '（我必须找个安全的地方...）' }
+                ],
+                choices: [
+                    { text: '去警局', next: 'go_police' },
+                    { text: '联系神秘人', next: 'contact_mystery' }
+                ]
+            },
+            'keep_hiding': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我在地铁站躲了一整天...）' },
+                    { speaker: '我', text: '（但食物和水都快没了...）' },
+                    { speaker: '我', text: '（我必须做出决定...）' }
+                ],
+                choices: [
+                    { text: '尝试离开', next: 'try_leave' },
+                    { text: '继续等待', next: 'keep_wait' }
+                ]
+            },
+            'leave_city': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我尝试离开城市...）' },
+                    { speaker: '？？？', text: '（在检查站被拦下）抱歉，最近不能出城。' },
+                    { speaker: '我', text: '（他们...已经控制了整个城市？）' }
+                ],
+                choices: [
+                    { text: '返回市区', next: 'return_city' },
+                    { text: '强行闯关', next: 'force_through' }
+                ]
+            },
+            'dont_open': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '张明', text: '（门外安静了一会儿）...我知道你在里面。' },
+                    { speaker: '张明', text: '（传来玻璃破碎的声音）' },
+                    { speaker: '我', text: '（他进来了...）' }
+                ],
+                choices: [
+                    { text: '躲进卧室', next: 'hide_bedroom' },
+                    { text: '正面应对', next: 'face_zhang' }
+                ]
+            },
+            'open_confront': {
+                bg: 'bg-home',
+                dialogues: [
+                    { speaker: '我', text: '（我打开门，手里握着防狼喷雾...）' },
+                    { speaker: '张明', text: '（他笑了）你以为这个有用？' },
+                    { speaker: '张明', text: '（他一步步逼近...）' }
+                ],
+                choices: [
+                    { text: '使用喷雾', next: 'use_spray' },
+                    { text: '逃跑', next: 'run_zhang' }
+                ]
+            },
+            // 更多场景继续...
+            'continue_fight': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '我', text: '（我继续攻击，但完全不是他的对手...）' },
+                    { speaker: '张明', text: '（他轻松制服了我）真是顽固。' },
+                    { speaker: '张明', text: '那就让你体验一下...进化的感觉。' }
+                ],
+                choices: [
+                    { text: '挣扎', next: 'ending_assimilate' },
+                    { text: '放弃', next: 'ending_assimilate' }
+                ]
+            },
+            'beg_merge': {
+                bg: 'bg-office',
+                dialogues: [
+                    { speaker: '我', text: '（我跪地求饶）请...请不要杀我...' },
+                    { speaker: '张明', text: '（他俯视着我）杀你？不。' },
+                    { speaker: '张明', text: '我们会让你...变得更好。' }
+                ],
+                choices: [
+                    { text: '（无力反抗）', next: 'ending_assimilate' }
+                ]
+            },
+            'confront_truth': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '我', text: '你们...到底想干什么？！' },
+                    { speaker: '王医生', text: '我们在拯救人类。' },
+                    { speaker: '王医生', text: '疾病、战争、死亡...这些都是人类的诅咒。' },
+                    { speaker: '王医生', text: '我们提供进化。提供永恒。' }
+                ],
+                choices: [
+                    { text: '驳斥他的理论', next: 'refute_theory' },
+                    { text: '假装被说服', next: 'fake_convinced' }
+                ]
+            },
+            'collect_evidence': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '我', text: '（我悄悄拍照、录像...）' },
+                    { speaker: '我', text: '（这些证据足以揭露真相...）' },
+                    { speaker: '王医生', text: '（突然）你以为我没发现你吗？' }
+                ],
+                choices: [
+                    { text: '逃跑', next: 'evidence_run' },
+                    { text: '交出证据求饶', next: 'give_evidence' }
+                ]
+            },
+            'sabotage': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '我', text: '（我找到控制面板，试图破坏设施...）' },
+                    { speaker: '王医生', text: '（他出现了）愚蠢。' },
+                    { speaker: '王医生', text: '你以为这样就能阻止我们？' }
+                ],
+                choices: [
+                    { text: '继续破坏', next: 'continue_sabotage' },
+                    { text: '投降', next: 'surrender' }
+                ]
+            },
+            'trust_mystery': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '神秘人', text: '（他递给我一个设备）这是信号干扰器。' },
+                    { speaker: '神秘人', text: '伪人之间靠这个通讯。有了它，你可以监听他们。' },
+                    { speaker: '我', text: '（我接过设备...）' }
+                ],
+                choices: [
+                    { text: '使用设备', next: 'use_device' },
+                    { text: '继续深入', next: 'go_deeper' }
+                ]
+            },
+            'suspect_trap': {
+                bg: 'bg-secret',
+                dialogues: [
+                    { speaker: '我', text: '（我后退）这是个陷阱，对不对？' },
+                    { speaker: '神秘人', text: '（他叹了口气）我理解你的怀疑。' },
+                    { speaker: '神秘人', text: '但请相信我。我没有恶意。' }
+                ],
+                choices: [
+                    { text: '给一次机会', next: 'give_chance' },
+                    { text: '转身离开', next: 'turn_away' }
+                ]
+            },
+            'choose_fight': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我下定决心）我要战斗。' },
+                    { speaker: '神秘人', text: '很好。猎人组织会帮助你。' },
+                    { speaker: '神秘人', text: '跟我来。' }
+                ],
+                choices: [
+                    { text: '跟随', next: 'join_hunters' }
+                ]
+            },
+            'choose_escape': {
+                bg: 'bg-street',
+                dialogues: [
+                    { speaker: '我', text: '（我摇头）我...我做不到...' },
+                    { speaker: '神秘人', text: '（他沉默了一会儿）...我理解。' },
+                    { speaker: '神秘人', text: '但逃避解决不了问题。他们迟早会找到你。' }
+                ],
+                choices: [
+                    { text: '尝试隐藏身份', next: 'hide_identity' },
+                    { text: '改变主意', next: 'change_mind' }
+                ]
+            },
+            // 结局场景
+            'ending_normal': {
+                bg: 'bg-ending',
+                dialogues: [],
+                ending: true,
+                endingType: 'normal',
+                endingTitle: '【结局：幸存者】',
+                endingText: '你成功揭露了伪人的存在，并逃过了他们的追捕。虽然生活再也无法回到从前，但至少你保住了人类的身份。你加入了猎人组织，继续与伪人战斗。这是一场漫长的战争，但你知道，必须有人站出来。'
+            },
+            'ending_truth': {
+                bg: 'bg-ending',
+                dialogues: [],
+                ending: true,
+                endingType: 'truth',
+                endingTitle: '【结局：真相】',
+                endingText: '你发现了惊人的真相：伪人计划背后有一个更大的阴谋。人类高层早已知情，甚至...参与其中。伪人不是入侵者，而是人类自己创造的"完美物种"。你掌握了这个秘密，现在，你要决定：揭露它，还是保守它？'
+            },
+            'ending_hunter': {
+                bg: 'bg-ending',
+                dialogues: [],
+                ending: true,
+                endingType: 'normal',
+                endingTitle: '【结局：猎人】',
+                endingText: '你正式加入了猎人组织，成为对抗伪人的战士。训练是艰苦的，但你知道自己做的是正确的事。每一个被你救下的人，每一个被你阻止的同化案例，都让这场战争多了一分希望。你不再是猎物，你是猎人。'
+            },
+            'ending_sacrifice': {
+                bg: 'bg-ending',
+                dialogues: [],
+                ending: true,
+                endingType: 'normal',
+                endingTitle: '【结局：牺牲】',
+                endingText: '为了摧毁伪人大本营，你选择了自我牺牲。爆炸吞噬了一切，包括你。但你的牺牲没有白费——伪人的计划被彻底破坏，无数人因此得救。你成为了英雄，虽然没有人知道你的名字。'
+            }
+        };
+
+        // 游戏引擎
+        const game = {
+            currentScene: null,
+            dialogueIndex: 0,
+            flags: {},
+            inventory: [],
+            isTyping: false,
+            typingTimeout: null,
+
+            // 初始化
+            init() {
+                this.loadProgress();
+                this.setupEventListeners();
+            },
+
+            // 设置事件监听
+            setupEventListeners() {
+                document.getElementById('dialogue-box').addEventListener('click', () => {
+                    if (!this.currentScene || document.getElementById('choices-container').style.display === 'flex') {
+                        return;
+                    }
+                    this.nextDialogue();
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' || e.code === 'Enter') {
+                        if (!this.currentScene || document.getElementById('choices-container').style.display === 'flex') {
+                            return;
+                        }
+                        e.preventDefault();
+                        this.nextDialogue();
+                    }
+                });
+            },
+
+            // 开始游戏
+            start() {
+                document.getElementById('title-screen').classList.add('hidden');
+                document.getElementById('menu-buttons').classList.remove('hidden');
+                document.getElementById('dialogue-box').classList.remove('hidden');
+                this.loadScene('start');
+            },
+
+            // 加载场景
+            loadScene(sceneId) {
+                const scene = scenes[sceneId];
+                if (!scene) {
+                    console.error('Scene not found:', sceneId);
+                    return;
+                }
+
+                this.currentScene = scene;
+                this.dialogueIndex = 0;
+
+                // 设置背景
+                const bg = document.getElementById('background');
+                bg.className = scene.bg;
+
+                // 清空角色
+                document.getElementById('characters').innerHTML = '';
+
+                // 显示第一个对话
+                this.showDialogue();
+            },
+
+            // 显示对话
+            showDialogue() {
+                const dialogue = this.currentScene.dialogues[this.dialogueIndex];
+                if (!dialogue) {
+                    // 显示选项
+                    this.showChoices();
+                    return;
+                }
+
+                document.getElementById('speaker-name').textContent = dialogue.speaker;
+                this.typeText(dialogue.text);
+            },
+
+            // 打字效果
+            typeText(text) {
+                const textElement = document.getElementById('dialogue-text');
+                textElement.textContent = '';
+                this.isTyping = true;
+
+                let index = 0;
+                const type = () => {
+                    if (index < text.length) {
+                        textElement.textContent += text[index];
+                        index++;
+                        this.typingTimeout = setTimeout(type, 30);
+                    } else {
+                        this.isTyping = false;
+                    }
+                };
+                type();
+            },
+
+            // 跳过打字效果
+            skipTyping() {
+                if (this.isTyping) {
+                    clearTimeout(this.typingTimeout);
+                    const dialogue = this.currentScene.dialogues[this.dialogueIndex];
+                    document.getElementById('dialogue-text').textContent = dialogue.text;
+                    this.isTyping = false;
+                }
+            },
+
+            // 下一个对话
+            nextDialogue() {
+                if (this.isTyping) {
+                    this.skipTyping();
+                    return;
+                }
+
+                this.dialogueIndex++;
+                this.showDialogue();
+            },
+
+            // 显示选项
+            showChoices() {
+                const choicesContainer = document.getElementById('choices-container');
+                choicesContainer.innerHTML = '';
+
+                if (this.currentScene.ending) {
+                    this.showEnding();
+                    return;
+                }
+
+                if (this.currentScene.choices) {
+                    this.currentScene.choices.forEach(choice => {
+                        const btn = document.createElement('button');
+                        btn.className = 'choice-btn';
+                        btn.textContent = choice.text;
+                        btn.onclick = (e) => {
+                            e.stopPropagation();
+                            this.selectChoice(choice.next);
+                        };
+                        choicesContainer.appendChild(btn);
+                    });
+                    choicesContainer.style.display = 'flex';
+                }
+            },
+
+            // 选择选项
+            selectChoice(nextScene) {
+                document.getElementById('choices-container').style.display = 'none';
+                this.saveProgress();
+                this.loadScene(nextScene);
+            },
+
+            // 显示结局
+            showEnding() {
+                document.getElementById('dialogue-box').classList.add('hidden');
+                document.getElementById('choices-container').style.display = 'none';
+                document.getElementById('menu-buttons').classList.add('hidden');
+
+                const endingScreen = document.getElementById('ending-screen');
+                document.getElementById('ending-title').textContent = this.currentScene.endingTitle;
+                document.getElementById('ending-text').textContent = this.currentScene.endingText;
+                endingScreen.style.display = 'flex';
+
+                this.saveProgress();
+            },
+
+            // 存档
+            saveProgress(slot = 1) {
+                const saveData = {
+                    currentScene: this.currentScene ? this.currentScene : 'start',
+                    dialogueIndex: this.dialogueIndex,
+                    flags: this.flags,
+                    inventory: this.inventory,
+                    timestamp: new Date().toLocaleString()
+                };
+
+                const saves = JSON.parse(localStorage.getItem('pseudoHumanSaves') || '{}');
+                saves[slot] = saveData;
+                localStorage.setItem('pseudoHumanSaves', JSON.stringify(saves));
+            },
+
+            // 读档
+            loadProgress(slot = null) {
+                if (slot) {
+                    const saves = JSON.parse(localStorage.getItem('pseudoHumanSaves') || '{}');
+                    const saveData = saves[slot];
+                    if (saveData) {
+                        this.currentScene = scenes[saveData.currentScene] || scenes['start'];
+                        this.dialogueIndex = saveData.dialogueIndex || 0;
+                        this.flags = saveData.flags || {};
+                        this.inventory = saveData.inventory || [];
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            // 显示存档面板
+            showSavePanel() {
+                this.showPanel('save');
+            },
+
+            // 显示读档面板
+            showLoadPanel() {
+                this.showPanel('load');
+            },
+
+            // 显示面板
+            showPanel(type) {
+                const panel = document.getElementById('save-load-panel');
+                const title = document.getElementById('panel-title');
+                const slotsContainer = document.getElementById('save-slots');
+
+                title.textContent = type === 'save' ? '存档' : '读档';
+                slotsContainer.innerHTML = '';
+
+                const saves = JSON.parse(localStorage.getItem('pseudoHumanSaves') || '{}');
+
+                for (let i = 1; i <= gameData.saveSlots; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'save-slot';
+
+                    const saveData = saves[i];
+                    if (saveData) {
+                        slot.innerHTML = `
+                            <div class="slot-number">存档 ${i}</div>
+                            <div class="slot-info">场景：${saveData.currentScene}</div>
+                            <div class="slot-time">${saveData.timestamp}</div>
+                        `;
+                    } else {
+                        slot.innerHTML = `
+                            <div class="slot-number">存档 ${i}</div>
+                            <div class="slot-info">空</div>
+                        `;
+                    }
+
+                    slot.onclick = () => {
+                        if (type === 'save') {
+                            this.saveProgress(i);
+                            alert('存档成功！');
+                            this.closePanel();
+                        } else {
+                            if (this.loadProgress(i)) {
+                                this.closePanel();
+                                document.getElementById('title-screen').classList.add('hidden');
+                                document.getElementById('menu-buttons').classList.remove('hidden');
+                                document.getElementById('dialogue-box').classList.remove('hidden');
+                                this.showDialogue();
+                            } else {
+                                alert('该存档位为空！');
+                            }
+                        }
+                    };
+
+                    slotsContainer.appendChild(slot);
+                }
+
+                panel.style.display = 'block';
+            },
+
+            // 关闭面板
+            closePanel() {
+                document.getElementById('save-load-panel').style.display = 'none';
+            },
+
+            // 返回标题
+            toTitle() {
+                document.getElementById('ending-screen').style.display = 'none';
+                document.getElementById('save-load-panel').style.display = 'none';
+                document.getElementById('title-screen').classList.remove('hidden');
+                document.getElementById('menu-buttons').classList.add('hidden');
+                document.getElementById('dialogue-box').classList.add('hidden');
+                document.getElementById('choices-container').style.display = 'none';
+                this.currentScene = null;
+            },
+
+            // 显示制作信息
+            showCredits() {
+                alert('伪人大本营\n\n一个橙光游戏风格的互动视觉小说\n\n故事：AI 生成\n程序：AI 生成\n\n感谢游玩！');
+            }
+        };
+
+        // 初始化游戏
+        game.init();
+    </script>
+</body>
+</html>
