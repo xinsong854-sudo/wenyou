@@ -415,6 +415,29 @@ const scenes = {
         ],
         choices: [
             { text: '「说是工作文件」——假装镇定', next: 'fake_work' },
+            { text: '「直接询问纸条」——正面质问', next: 'ask_note' },
+            { text: '「仔细观察张明」——INS 检定', next: 'observe_zhangming', onclick: 'doInsCheck()' }
+        ]
+    },
+    'observe_zhangming': {
+        bg: 'bg-office',
+        dialogues: [
+            { speaker: '系统', text: '🎲 洞察检定...' },
+            { speaker: '我', text: '（我强作镇定，暗中观察着张明的每一个细节...）' }
+        ],
+        choices: [
+            { text: '继续', next: 'observe_result' }
+        ]
+    },
+    'observe_result': {
+        bg: 'bg-office',
+        dialogues: [
+            { speaker: '我', text: '（他的眨眼...太规律了。每 3 秒一次，像设定好的程序。）' },
+            { speaker: '我', text: '（还有他的站姿，完美对称，双手下垂角度完全一致...）' },
+            { speaker: '我', text: '（这绝对不是正常人会有的状态！）' }
+        ],
+        choices: [
+            { text: '「说是工作文件」——假装镇定', next: 'fake_work' },
             { text: '「直接询问纸条」——正面质问', next: 'ask_note' }
         ]
     },
