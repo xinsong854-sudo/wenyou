@@ -2674,6 +2674,47 @@ function showTitle() {
     document.getElementById('title-screen').style.display = 'flex';
 }
 
+// INS 检定函数
+function doInsCheck() {
+    if (!playerCharacter) return;
+    
+    const ins = playerCharacter.stats.INS;
+    const skill = playerCharacter.skills.侦查 || 0;
+    const dc = 50; // 普通难度
+    const roll = Math.floor(Math.random() * 100) + 1;
+    
+    let result, resultText;
+    if (roll <= 5) {
+        result = '大成功';
+        resultText = '🎉 大成功！你发现了惊人的细节！';
+    } else if (roll >= 96) {
+        result = '大失败';
+        resultText = '💀 大失败！你看得太入迷，被张明发现了！';
+    } else if (roll <= ins + skill - dc + 50) {
+        result = '成功';
+        resultText = '✅ 成功！你注意到张明的异常行为。';
+    } else {
+        result = '失败';
+        resultText = '❌ 失败！你没看出什么异常。';
+    }
+    
+    // 保存检定结果供场景使用
+    window.lastCheckResult = result;
+    
+    // 显示检定 UI
+    showCheckResult({
+        attribute: 'INS',
+        attrValue: ins,
+        skill: '侦查',
+        skillValue: skill,
+        dc: dc,
+        roll: roll,
+        targetValue: ins + skill,
+        result: result,
+        description: '仔细观察张明的行为'
+    });
+}
+
 function showPhone() {
     document.getElementById('phone-ui').style.display = 'block';
     updatePhoneTime();
