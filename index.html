@@ -2350,20 +2350,11 @@ function showDialogue(dialogue) {
     const speakerEl = document.getElementById('speaker-name');
     const textEl = document.getElementById('dialogue-text');
     
-    // 如果说话者是"我"，显示玩家名字
+    // 显示说话者名字
     let speakerName = dialogue.speaker || '';
-    if (speakerName === '我' && playerName) {
-        speakerName = playerName;
-    }
     speakerEl.textContent = speakerName;
     
     currentText = dialogue.text || '';
-    
-    // 将对话中的"我"替换为玩家名字（但保留引号内的"我"和固定表达）
-    if (playerName) {
-        // 替换句首的"我"和括号内的"我"
-        currentText = currentText.replace(/（我/g, '（' + playerName).replace(/我/g, playerName);
-    }
     
     // 简单显示，不打字机效果
     textEl.innerHTML = currentText.replace(/\n/g, '<br>');
