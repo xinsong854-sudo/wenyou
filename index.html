@@ -2318,6 +2318,50 @@ const scenes = {
             { text: '被抓', next: 'ending_captured' }
         ]
     }
+
+    'threat_police': {
+        bg: 'bg-office',
+        dialogues: [
+            { speaker: '我', text: '（...别过来！）' },
+            { speaker: '警察', text: '「再动我们就开枪了！」' },
+            { speaker: '我', text: '（...完了。）' }
+        ],
+        choices: [
+            { text: '结局', next: 'ending_captured' }
+        ]
+    },
+    'caught_escape': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（...跑不动了。）' },
+            { speaker: '？？？', text: '「抓到你了。」' }
+        ],
+        choices: [
+            { text: '结局', next: 'ending_captured' }
+        ]
+    },
+    'caught_station': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（车站在即...）' },
+            { speaker: '？？？', text: '「别挣扎了。」' },
+            { speaker: '我', text: '（一只手搭在了我的肩上。）' }
+        ],
+        choices: [
+            { text: '结局', next: 'ending_captured' }
+        ]
+    },
+    'find_food': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（...太饿了，必须找点吃的。）' },
+            { speaker: '我', text: '（但在外面游荡太危险了...）' }
+        ],
+        choices: [
+            { text: '继续寻找', next: 'ending_starve' },
+            { text: '放弃', next: 'ending_hide' }
+        ]
+    }
 };
 
 
