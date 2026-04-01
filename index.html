@@ -757,6 +757,27 @@ const scenes = {
         ],
         choices: [
             { text: '「询问情况」——这是哪？', next: 'ask_situation' },
+            { text: '「要求证明身份」——你怎么证明不是伪人？', next: 'ask_proof' },
+            { text: '💪 潜入基地 - SUR 检定', next: 'sur_check_hospital', onclick: 'doSurCheckHospital()' }
+        ]
+    },
+    'sur_check_hospital': {
+        bg: 'bg-secret',
+        dialogues: [
+            { speaker: '系统', text: '🎲 生存检定（潜入）...' },
+            { speaker: '我', text: '（我屏住呼吸，小心翼翼地潜入地下室...）' }
+        ],
+        choices: [
+            { text: '查看结果', next: 'sur_result_hospital' }
+        ]
+    },
+    'sur_result_hospital': {
+        bg: 'bg-secret',
+        dialogues: [
+            { speaker: '系统', text: '检定结果已应用' }
+        ],
+        choices: [
+            { text: '「询问情况」——这是哪？', next: 'ask_situation' },
             { text: '「要求证明身份」——你怎么证明不是伪人？', next: 'ask_proof' }
         ]
     },
@@ -782,8 +803,24 @@ const scenes = {
         ],
         choices: [
             { text: '联系猎人组织', next: 'contact_hunter' },
-            { text: '想办法离开城市', next: 'leave_city' }
+            { text: '想办法离开城市', next: 'leave_city' },
+            { text: '🎭 混入人群 - DIS 检定', next: 'dis_check_mall', onclick: 'doDisCheckMall()' }
         ]
+    },
+    'dis_check_mall': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '系统', text: '🎲 伪装检定（混入人群）...' },
+            { speaker: '我', text: '（我调整呼吸，模仿周围人的神态和动作...）' }
+        ],
+        choices: [
+            { text: '查看检定结果', next: 'dis_result_mall' }
+        ]
+    },
+    'dis_result_mall': {
+        bg: 'bg-street',
+        dialogues: [],
+        choices: []
     },
     'hide_home': {
         bg: 'bg-home',
@@ -3048,11 +3085,9 @@ function doLukCheckEscape() {
     let result;
     if (roll <= 5) {
         result = '大成功';
-        // 大成功→轻松逃脱 + 发现秘密
         alert('🍀 大成功！你如有神助，轻松逃脱，还意外发现了伪人的秘密基地位置！');
     } else if (roll >= 96) {
         result = '大失败';
-        // 大失败→ending_unlucky
         loadScene('ending_unlucky');
         return;
     } else if (roll <= luk + skill - dc + 50) {
@@ -3075,6 +3110,46 @@ function doLukCheckEscape() {
         targetValue: luk + skill,
         result: result,
         description: '幸运逃脱'
+    });
+}
+
+// SUR 检定函数（go_hospital 后）
+function doSurCheckHospital() {
+    if (!playerCharacter) return;
+    
+    const sur = playerCharacter.stats.SUR;
+    const skill = playerCharacter.skills.急救 || 0;
+    const dc = 60;
+    const roll = Math.floor(Math.random() * 100) + 1;
+    
+    let result;
+    if (roll <= 5) {
+        result = '大成功';
+        alert('💪 大成功！你轻松潜入，还发现了核心机密和医疗物资！');
+    } else if (roll >= 96) {
+        result = '大失败';
+        loadScene('ending_injury');
+        return;
+    } else if (roll <= sur + skill - dc + 50) {
+        result = '成功';
+        alert('✅ 成功！你成功潜入医院。');
+    } else {
+        result = '失败';
+        alert('❌ 失败！你受伤了，但还是逃掉了。');
+    }
+    
+    window.lastCheckResult = result;
+    
+    showCheckResult({
+        attribute: 'SUR',
+        attrValue: sur,
+        skill: '急救',
+        skillValue: skill,
+        dc: dc,
+        roll: roll,
+        targetValue: sur + skill,
+        result: result,
+        description: '潜入医院'
     });
 }
 
