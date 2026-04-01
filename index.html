@@ -2383,23 +2383,27 @@ function nextDialogue() {
     const scene = scenes[currentScene];
     if (!scene) return;
     
-    // 如果有选项且已经显示，不要隐藏（让玩家点击）
     const choicesContainer = document.getElementById('choices-container');
+    
+    // 如果选项已经显示，不要隐藏（让玩家点击）
     if (scene.choices && choicesContainer.style.display === 'flex') {
-        return; // 选项已显示，等待玩家点击
+        return;
     }
     
     dialogueIndex++;
+    
+    // 检查是否还有下一句对话
     if (dialogueIndex < scene.dialogues.length) {
         showDialogue(scene.dialogues[dialogueIndex]);
-        // 在最后一句对话后显示选项
+        
+        // 如果是最后一句对话且有选项，显示选项
         if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
             showChoices(scene.choices);
+            // start 场景获得纸条
+            if (currentScene === 'start') {
+                addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
+            }
         }
-    }
-    // 特殊处理：start 场景在显示选项时获得纸条
-    if (currentScene === 'start' && scene.choices && dialogueIndex === scene.dialogues.length - 1) {
-        addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
     }
 }
 
