@@ -486,6 +486,28 @@ const scenes = {
         ],
         choices: [
             { text: '🏃 跑！', next: 'escape_office' },
+            { text: '😰 ...跟他们走', next: 'go_with_them' },
+            { text: '🧠 保持冷静 - SAN 检定', next: 'calm_check', onclick: 'doSanCheck()' }
+        ]
+    },
+    'calm_check': {
+        bg: 'bg-office',
+        dialogues: [
+            { speaker: '系统', text: '🎲 理智检定...' },
+            { speaker: '我', text: '（我强迫自己冷静下来，分析当前 situation...）' }
+        ],
+        choices: [
+            { text: '继续', next: 'calm_result' }
+        ]
+    },
+    'calm_result': {
+        bg: 'bg-office',
+        dialogues: [
+            { speaker: '我', text: '（...不行，心跳太快了。）' },
+            { speaker: '我', text: '（但至少我现在还能思考。）' }
+        ],
+        choices: [
+            { text: '🏃 跑！', next: 'escape_office' },
             { text: '😰 ...跟他们走', next: 'go_with_them' }
         ]
     },
