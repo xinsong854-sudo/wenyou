@@ -2389,11 +2389,12 @@ function nextDialogue() {
         // 在最后一句对话后显示选项
         if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
             showChoices(scene.choices);
-            // 特殊处理：start 场景获得纸条
-            if (currentScene === 'start') {
-                addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
-            }
         }
+    }
+    // 特殊处理：start 场景在显示选项时获得纸条
+    if (currentScene === 'start' && scene.choices && dialogueIndex === scene.dialogues.length - 1) {
+        addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
+    }
     }
 }
 
