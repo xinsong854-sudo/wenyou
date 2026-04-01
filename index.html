@@ -182,14 +182,9 @@
 <div id="game-container">
     <div id="background" class="bg-office"></div>
     <div id="menu-buttons">
-        <button class="menu-btn" onclick="showSavePanel()">💾 存档</button>
-        <button class="menu-btn" onclick="showLoadPanel()">📂 读档</button>
         <button class="menu-btn" onclick="showTitle()">🏠 标题</button>
     </div>
     
-    <div id="intro-overlay" style="display:none;">
-        <div id="intro-text"></div>
-    </div>
     <div id="title-screen">
         <h1>🎭 伪人大本营</h1>
         <p class="subtitle">你能识破伪装者吗？</p>
@@ -199,14 +194,14 @@
             <p class="name-hint">💡 输入特定角色名有彩蛋哦~</p>
         </div>
         <button class="title-btn" id="start-btn" onclick="showNameInput()">▶️ 开始游戏</button>
-        <button class="title-btn" onclick="showLoadPanel()">📂 继续游戏</button>
+        
     </div>
     <div id="ending-screen">
         <h2 id="ending-title"></h2>
         <p class="ending-text" id="ending-content"></p>
         <button class="title-btn" onclick="showTitle()">🔄 重新开始</button>
     </div>
-    <div id="dialogue-box" style="display:none;" onclick="nextDialogue()">
+    <div id="dialogue-box" style="display: none;" onclick="nextDialogue()">
         <div id="speaker-name"></div>
         <div id="dialogue-text"></div>
         <div id="continue-indicator">▼</div>
@@ -230,10 +225,7 @@
             </div>
         </div>
     </div>
-<div id="save-load-panel">
-        <h2 id="panel-title">存档</h2>
-        <div class="save-slots" id="save-slots"></div>
-        <div class="panel-buttons">
+    <div class="panel-buttons">
             <button class="panel-btn" onclick="hidePanel()">关闭</button>
         </div>
     </div>
@@ -2448,28 +2440,27 @@ function useItem(itemId) {
 }
 
 function confirmName() {
-    const input = document.getElementById('player-name-input');
-    const name = input.value.trim() || '林晓';
-    playerName = name;
-    
-    // 检查彩蛋
-    for (const [role, title] of Object.entries(easterEggRoles)) {
-        if (name.includes(role)) {
+    try {
+        const input = document.getElementById('player-name-input');
+        playerName = input.value.trim() || '林晓';
+        
+        // 检查彩蛋
+        if (easterEggRoles[playerName]) {
             isEasterEgg = true;
-            easterEggRole = role;
-            alert('🎉 彩蛋解锁！\n你选择扮演：' + role + '（' + title + '）\n游戏中会有特殊对话哦~');
-            break;
+            easterEggRole = playerName;
+            alert('彩蛋解锁：' + playerName);
         }
+        
+        document.getElementById('title-screen').style.display = 'none';
+        document.getElementById('dialogue-box').style.display = 'block';
+        loadScene('start');
+    } catch(e) {
+        console.error('Error:', e);
+        alert('启动失败：' + e.message);
     }
-    
-    document.getElementById('title-screen').style.display = 'none';
-    document.getElementById('dialogue-box').style.display = 'block';
-    loadScene('start');
 }
 
 function startGame() {
-    initInventory();
-    addPhoneButton();
     showNameInput();
 }
 
@@ -2933,61 +2924,21 @@ function showTitle() {
     document.getElementById('title-screen').style.display = 'flex';
 }
 
-function saveGame(slot) {
-    const data = { 
-        scene: currentScene, 
-        dialogue: dialogueIndex, 
-        time: new Date().toLocaleString(),
-        playerName: playerName,
-        isEasterEgg: isEasterEgg,
-        easterEggRole: easterEggRole
-    };
+;
     localStorage.setItem('pseudoSave' + slot, JSON.stringify(data));
     renderSaveSlots();
 }
 
-function loadGame(slot) {
-    const data = localStorage.getItem('pseudoSave' + slot);
-    if (data) {
-        const parsed = JSON.parse(data);
-        playerName = parsed.playerName || '林晓';
-        isEasterEgg = parsed.isEasterEgg || false;
-        easterEggRole = parsed.easterEggRole || '';
-        document.getElementById('title-screen').style.display = 'none';
-        document.getElementById('dialogue-box').style.display = 'block';
-        loadScene(parsed.scene);
-        dialogueIndex = parsed.dialogue;
-    }
+
 }
 
-function showSavePanel() {
-    document.getElementById('panel-title').textContent = '存档';
-    document.getElementById('save-load-panel').style.display = 'block';
-    renderSaveSlots(true);
-}
 
-function showLoadPanel() {
-    document.getElementById('panel-title').textContent = '读档';
-    document.getElementById('save-load-panel').style.display = 'block';
-    renderSaveSlots(false);
-}
 
-function hidePanel() {
-    document.getElementById('save-load-panel').style.display = 'none';
-}
 
-function renderSaveSlots(isSave) {
-    const container = document.getElementById('save-slots');
-    container.innerHTML = '';
-    for (let i = 1; i <= 6; i++) {
-        const data = localStorage.getItem('pseudoSave' + i);
-        const slot = document.createElement('div');
-        slot.className = 'save-slot';
-        if (data) {
-            const parsed = JSON.parse(data);
-            const eeTag = parsed.isEasterEgg ? ' 🎉' : '';
-            slot.innerHTML = '<div class="slot-number">存档 ' + i + '</div><div class="slot-info">' + (parsed.playerName || '林晓') + eeTag + '</div><div class="slot-time">' + parsed.time + '</div>';
-        } else {
+
+
+
+ else {
             slot.innerHTML = '<div class="slot-number">存档 ' + i + '</div><div class="slot-info">空</div>';
         }
         slot.onclick = () => {
