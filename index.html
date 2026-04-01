@@ -229,7 +229,29 @@
         <p class="ending-text" id="ending-content"></p>
         <button class="title-btn" onclick="showTitle()">🔄 重新开始</button>
     </div>
-    <div id="dialogue-box" style="display: none;" onclick="nextDialogue()">
+    <!-- 右上角车卡按钮 -->
+<button id="char-sheet-btn" onclick="toggleCharSheet(event)" style="position:fixed;top:10px;right:10px;background:#2a2a4a;border:2px solid #4a4a6a;color:#4ecdc4;padding:8px 15px;border-radius:8px;cursor:pointer;z-index:100;font-size:14px;">📋 车卡</button>
+
+<!-- 车卡面板 -->
+<div id="char-sheet" style="display:none;position:fixed;top:50px;right:10px;width:280px;background:rgba(20,20,40,0.98);border:2px solid #4a4a6a;border-radius:10px;padding:15px;z-index:99;font-size:13px;">
+    <h3 style="color:#4ecdc4;margin:0 0 10px 0;">📊 角色卡</h3>
+    <div id="char-name" style="color:#fff;margin-bottom:10px;"></div>
+    <div style="border-top:1px solid #4a4a6a;padding-top:10px;">
+        <div style="color:#aaa;margin-bottom:5px;">【属性】</div>
+        <div id="char-stats"></div>
+    </div>
+    <div style="border-top:1px solid #4a4a6a;padding-top:10px;margin-top:10px;">
+        <div style="color:#aaa;margin-bottom:5px;">【技能】</div>
+        <div id="char-skills"></div>
+    </div>
+    <div style="border-top:1px solid #4a4a6a;padding-top:10px;margin-top:10px;">
+        <div style="color:#aaa;margin-bottom:5px;">【特质】</div>
+        <div id="char-traits"></div>
+    </div>
+    <button onclick="toggleCharSheet(event)" style="margin-top:10px;width:100%;background:#3a3a5a;border:none;color:#fff;padding:8px;border-radius:5px;cursor:pointer;">关闭</button>
+</div>
+
+<div id="dialogue-box" style="display: none;" onclick="nextDialogue()">
         <div id="speaker-name"></div>
         <div id="dialogue-text"></div>
         <div id="continue-indicator">▼</div>
@@ -2906,6 +2928,18 @@ function confirmName() {
         
         playerName = nameValue;
         
+        // 初始化默认车卡数据（不显示 UI）
+        playerStats = { SAN: 50, INS: 50, DIS: 50, LUK: 50, SUR: 50 };
+        playerSkills = { 侦查：10, 心理学：10, 伪装：10, 急救：10, 生存：10 };
+        playerCharacter = {
+            name: playerName,
+            stats: { ...playerStats },
+            skills: { ...playerSkills },
+            background: '普通人',
+            positiveTraits: [],
+            negativeTraits: []
+        };
+        
         // 检查彩蛋（仅提示，不改变属性）
         const officialChar = worldData.characters.find(c => 
             c.name === playerName || (c.alias && c.alias.includes(playerName))
@@ -2914,6 +2948,8 @@ function confirmName() {
         if (officialChar) {
             isEasterEgg = true;
             easterEggRole = playerName;
+            // 使用官方角色属性
+            playerCharacter.stats = { ...officialChar.stats };
             alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + officialChar.background);
         } else if (easterEggRoles[playerName]) {
             isEasterEgg = true;
@@ -3398,6 +3434,40 @@ function addPhoneButton() {
 
 // 核心游戏函数
 
+
+// 车卡 UI 切换
+function toggleCharSheet(event) {
+    if (event) event.stopPropagation();
+    const sheet = document.getElementById('char-sheet');
+    const btn = document.getElementById('char-sheet-btn');
+    
+    if (sheet.style.display === 'none' || !sheet.style.display) {
+        // 显示车卡
+        if (playerCharacter) {
+            document.getElementById('char-name').innerHTML = '👤 <b>' + playerCharacter.name + '</b> (' + playerCharacter.background + ')';
+            
+            const statsHtml = Object.entries(playerCharacter.stats).map(([k, v]) => {
+                const labels = { SAN: '理智', INS: '洞察', DIS: '伪装', LUK: '幸运', SUR: '生存' };
+                return '<div style="display:flex;justify-content:space-between;padding:3px 0;"><span style="color:#aaa;">' + labels[k] + '</span><span style="color:#4ecdc4;">' + v + '</span></div>';
+            }).join('');
+            document.getElementById('char-stats').innerHTML = statsHtml;
+            
+            const skillsHtml = Object.entries(playerCharacter.skills).filter(([_, v]) => v > 0).map(([k, v]) => {
+                return '<div style="display:flex;justify-content:space-between;padding:3px 0;"><span style="color:#aaa;">' + k + '</span><span style="color:#4ecdc4;">' + v + '</span></div>';
+            }).join('') || '<div style="color:#666;">无</div>';
+            document.getElementById('char-skills').innerHTML = skillsHtml;
+            
+            const traits = (playerCharacter.positiveTraits || []).concat(playerCharacter.negativeTraits || []);
+            const traitsHtml = traits.length > 0 ? traits.map(t => '<div style="color:#aaa;padding:3px 0;">• ' + t + '</div>').join('') : '<div style="color:#666;">无</div>';
+            document.getElementById('char-traits').innerHTML = traitsHtml;
+        }
+        sheet.style.display = 'block';
+        btn.style.display = 'none';
+    } else {
+        sheet.style.display = 'none';
+        btn.style.display = 'block';
+    }
+}
 
 </script>
 </body>
