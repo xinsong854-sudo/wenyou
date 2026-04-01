@@ -226,26 +226,43 @@ let easterEggRole = '';
 
 // 彩蛋角色列表（伪人大本营世界观内）
 const easterEggRoles = {
+    'AI': '别名·AI 核心',
     'AT': '奇迹伪神',
+    'Hecate': '别名·仿生人',
+    'Tipp-Ex': '别名·完美主义者',
     'X': '生骸',
+    '两界': '别名·两界交流场所',
+    '二营长': '别名·二营长·清劣者',
     '云蓝': '手偶少女',
     '亚契': '炼金术师',
+    '人监': '别名·人监之口',
     '人魈': '怪原生',
     '伊露': '面具收集者',
     '伪物': '里界物品使用者',
     '伪神': '被供奉的伪人',
     '伽纳罗丝': '血液生物',
+    '先驱者': '别名·先驱者',
     '兔仙': '茶居公寓楼长',
+    '兔子': '别名·茶居公寓楼长',
     '公寓': '伪人聚落',
     '冷寂': '上古存在',
     '凝胶': '随心史莱姆',
+    '利维坦': '别名·利维坦',
     '化而为': '史莱姆伪人',
     '单先生': '电影院院长',
+    '史莱姆': '别名·史莱姆伪人',
+    '咔哒小姐': '别名·炼金术师',
     '哨站': '两界交流场所',
     '墨水夜': '水池居民',
     '多虫': '虫群',
     '大夜夜': '服装设计师',
+    '奇迹': '别名·奇迹伪神',
+    '学校': '别名·伪人学校学生',
+    '安诺涅': '别名·槐安公寓楼长·督察者',
+    '宗教': '别名·西陆宗教人士',
     '小赤帽': '狼影清洁工',
+    '异物': '别名·里界物品使用者',
+    '手偶': '别名·手偶少女',
     '折纸簌鸟': '大排档老板',
     '拟人蝎': '巢穴蝎娘',
     '教廷': '西陆宗教人士',
@@ -259,28 +276,40 @@ const easterEggRoles = {
     '涟': '鲛人',
     '渔夫': '利维坦',
     '温塔莎': '基质龙',
+    '温柔': '别名·温柔治愈者',
     '灯塔': '伪人学校学生',
     '特洛菲': '人监之口',
     '牺牲': '古祭祭司',
     '独允': 'AI 核心',
     '猎人': '猎人公会成员',
+    '猎手': '别名·猎人公会成员',
     '瓦莉奥尔': '战斗者',
+    '生骸': '别名·生骸',
     '石测': '石头美食家',
+    '祭司': '别名·古祭祭司',
     '福音': '济世者伪神',
     '笑颜': '人偶',
     '红缇香': '阴婚新娘',
     '绫希': '月之投影',
+    '聚落': '别名·伪人聚落',
     '艾尔伯特': '先驱者',
     '荆千棘': '蔷薇助手',
     '营长': '槐安公寓楼长·督察者',
+    '虫群': '别名·虫群',
     '虫者': '电影院售票员',
+    '被供奉': '别名·被供奉的伪人',
+    '西瓜': '别名·西瓜公司董事',
     '西瓜人': '西瓜公司董事',
+    '调查局': '别名·调查局成员',
     '赫卡忒': '仿生人',
+    '里世界': '别名·异空间存在',
     '里界': '异空间存在',
     '长喙': '说书人',
     '阿秋': '人监成员',
     '陆玖': '多面孔伪人',
     '非常玦蝶': '二营长·清劣者',
+    '风暴': '别名·编辑记者',
+    '鲛人': '别名·鲛人',
     '鸿': '编辑记者',
     '黎守': '调查局成员',
 };
@@ -2305,10 +2334,8 @@ function loadScene(sceneId) {
     // 显示对话
     showDialogue(scene.dialogues[0]);
     
-    // 显示选项（如果有）
-    if (scene.choices) {
-        showChoices(scene.choices);
-    }
+    // 隐藏选项，等对话播放完再显示
+    document.getElementById('choices-container').style.display = 'none';
 }
 
 function showDialogue(dialogue) {
@@ -2486,7 +2513,8 @@ function loadScene(sceneId) {
     bg.className = 'bg-' + (scene.bg || 'office');
     if (scene.ending) { showEnding(scene); return; }
     showDialogue(scene.dialogues[0]);
-    if (scene.choices) showChoices(scene.choices);
+    // 选项在对话播放完后显示，由 nextDialogue 控制
+    // if (scene.choices) showChoices(scene.choices);
 }
 
 function showDialogue(dialogue) {
@@ -2515,7 +2543,14 @@ function nextDialogue() {
     dialogueIndex++;
     if (dialogueIndex < scene.dialogues.length) {
         showDialogue(scene.dialogues[dialogueIndex]);
-        if (scene.choices && dialogueIndex === scene.dialogues.length - 1) showChoices(scene.choices);
+        // 在最后一句对话后显示选项
+        if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
+            showChoices(scene.choices);
+            // 特殊处理：start 场景获得纸条
+            if (currentScene === 'start') {
+                addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
+            }
+        }
     }
 }
 
