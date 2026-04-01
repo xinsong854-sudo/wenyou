@@ -31,7 +31,7 @@
         .save-slot:hover { background: rgba(50,50,80,0.8); }
         .panel-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
         .panel-btn { background: #3a3a5a; border: 1px solid #5a5a7a; border-radius: 8px; padding: 10px 25px; color: #fff; cursor: pointer; }
-        #title-screen { position: absolute; width: 100%; height: 100%; background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #title-screen { position: absolute; width: 100%; height: 100%; pointer-events: auto; background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         #title-screen h1 { font-size: 48px; color: #7a7aaa; margin-bottom: 20px; }
         #title-screen .subtitle { font-size: 18px; color: #5a5a7a; margin-bottom: 20px; }
         #name-input-container { display: none; flex-direction: column; align-items: center; margin-bottom: 20px; }
@@ -39,7 +39,7 @@
         #player-name-input { background: rgba(30,30,50,0.8); border: 2px solid #5a5a7a; border-radius: 8px; padding: 12px 20px; color: #fff; font-size: 16px; width: 250px; text-align: center; margin-bottom: 15px; }
         #player-name-input:focus { outline: none; border-color: #7a7aaa; }
         .name-hint { font-size: 12px; color: #5a5a7a; margin-top: 10px; }
-        .title-btn { background: #3a3a5a; border: 2px solid #5a5a7a; border-radius: 10px; padding: 15px 50px; color: #fff; font-size: 18px; cursor: pointer; margin: 10px; }
+        .title-btn { background: #3a3a5a; cursor: pointer; pointer-events: auto; border: 2px solid #5a5a7a; border-radius: 10px; padding: 15px 50px; color: #fff; font-size: 18px; cursor: pointer; margin: 10px; }
         .title-btn:hover { background: #4a4a6a; border-color: #7a7aaa; }
         #ending-screen { position: absolute; width: 100%; height: 100%; background: #000; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
         #ending-screen h2 { font-size: 36px; color: #7a7aaa; margin-bottom: 20px; text-align: center; }
@@ -223,10 +223,6 @@
                     <div class="phone-app" onclick="showPhoneTab('map')">🗺️<div class="phone-app-label">地图</div></div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="panel-buttons">
-            <button class="panel-btn" onclick="hidePanel()">关闭</button>
         </div>
     </div>
 </div>
@@ -2427,7 +2423,10 @@ let typingTimer = null;
 let currentText = '';
 
 function showNameInput() {
-    document.getElementById('start-btn').style.display = 'none';
+    console.log('showNameInput called');
+    var btn = document.getElementById('start-btn');
+    console.log('btn:', btn);
+    if(btn) btn.style.display = 'none';
     document.getElementById('name-input-container').classList.add('show');
     document.getElementById('player-name-input').focus();
 }
