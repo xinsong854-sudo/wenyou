@@ -338,6 +338,7 @@ const easterEggRoles = {
 };
 
 const scenes = {
+
     'start': {
         bg: 'bg-office',
         dialogues: [
@@ -2220,60 +2221,6 @@ const scenes = {
             { text: '被抓', next: 'ending_captured' }
         ]
     },
-    'call_110': {
-        bg: 'bg-home',
-        dialogues: [
-            { speaker: '我', text: '（我拨打了 110...）' },
-            { speaker: '警察', text: '【电话】您好，请问有什么紧急情况？' },
-            { speaker: '我', text: '（我该怎么说？他们会相信伪人的存在吗？）' }
-        ],
-        choices: [
-            { text: '说实话', next: 'police_truth' },
-            { text: '编个理由', next: 'police_lie' }
-        ]
-    },
-    'escape_office_2': {
-        bg: 'bg-street',
-        dialogues: [
-            { speaker: '我', text: '（我逃出了办公室！）' },
-            { speaker: '我', text: '（张明在后面追...）' }
-        ],
-        choices: [
-            { text: '躲进人群', next: 'hide_crowd' },
-            { text: '联系猎人', next: 'contact_hunter' }
-        ]
-    },
-    'escape_zhang_2': {
-        bg: 'bg-street',
-        dialogues: [
-            { speaker: '我', text: '（我从张明那里逃跑了！）' },
-            { speaker: '张明', text: '你逃不掉的...' }
-        ],
-        choices: [
-            { text: '甩掉他', next: 'shake_off' },
-            { text: '反击', next: 'fight_back' }
-        ]
-    },
-    'solo_action_2': {
-        bg: 'bg-street',
-        dialogues: [
-            { speaker: '我', text: '（我决定独自行动...）' }
-        ],
-        choices: [
-            { text: '成功', next: 'ending_hide' },
-            { text: '失败', next: 'ending_captured' }
-        ]
-    },
-    'solo_action_3': {
-        bg: 'bg-street',
-        dialogues: [
-            { speaker: '我', text: '（我自己行动...）' }
-        ],
-        choices: [
-            { text: '成功', next: 'ending_survivor' },
-            { text: '失败', next: 'ending_captured' }
-        ]
-    },
     'escape_clone': {
 
         bg: 'bg-street',
@@ -2285,6 +2232,7 @@ const scenes = {
             { text: '被抓', next: 'ending_captured' }
         ]
     }
+};
 };
 
 
