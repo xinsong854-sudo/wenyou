@@ -2928,30 +2928,68 @@ function confirmName() {
         
         playerName = nameValue;
         
-        // 初始化默认车卡数据（不显示 UI）
-        playerStats = { SAN: 50, INS: 50, DIS: 50, LUK: 50, SUR: 50 };
-        playerSkills = { 侦查:10, 心理学:10, 伪装:10, 急救:10, 生存:10 };
-        playerCharacter = {
-            name: playerName,
-            stats: { ...playerStats },
-            skills: { ...playerSkills },
-            background: '普通人',
-            positiveTraits: [],
-            negativeTraits: []
-        };
-        
-        // 检查彩蛋（仅提示，不改变属性）
+        // 检查是否是官方角色
         const officialChar = worldData.characters.find(c => 
             c.name === playerName || (c.alias && c.alias.includes(playerName))
         );
         
         if (officialChar) {
+            // 彩蛋角色：使用官方属性
             isEasterEgg = true;
             easterEggRole = playerName;
-            // 使用官方角色属性
-            playerCharacter.stats = { ...officialChar.stats };
-            alert('🎉 彩蛋解锁:' + playerName + '\n身份:' + officialChar.background);
-        } else if (easterEggRoles[playerName]) {
+            playerStats = { ...officialChar.stats };
+            playerCharacter = {
+                name: playerName,
+                stats: { ...officialChar.stats },
+                skills: { 侦查:15, 心理学:15, 伪装:10, 急救:5, 生存:10 },
+                background: officialChar.background,
+                positiveTraits: [],
+                negativeTraits: []
+            };
+            alert('🎉 彩蛋解锁:' + playerName + '\n身份:' + officialChar.background + '\n\n属性：' + JSON.stringify(officialChar.stats));
+        } else {
+            // 普通人：随机分配属性（250 点，每项 20-60）
+            let remaining = 250;
+            let stats = {};
+            const statKeys = ['SAN', 'INS', 'DIS', 'LUK', 'SUR'];
+            
+            // 前 4 项随机分配（每项 20-60）
+            for (let i = 0; i < 4; i++) {
+                const min = Math.max(20, remaining - 60 * (4 - i));
+                const max = Math.min(60, remaining - 20 * (4 - i));
+                const value = Math.floor(Math.random() * (max - min + 1)) + min;
+                stats[statKeys[i]] = value;
+                remaining -= value;
+            }
+            // 最后一项用剩余点数
+            stats[statKeys[4]] = remaining;
+            
+            // 随机技能分配（30 点）
+            const skills = { 侦查:0, 心理学:0, 伪装:0, 急救:0, 生存:0 };
+            let skillRemaining = 30;
+            const skillKeys = Object.keys(skills);
+            for (let i = 0; i < 4; i++) {
+                const add = Math.floor(Math.random() * (skillRemaining / (5 - i) + 1));
+                skills[skillKeys[i]] = add;
+                skillRemaining -= add;
+            }
+            skills[skillKeys[4]] = skillRemaining;
+            
+            isEasterEgg = false;
+            easterEggRole = null;
+            playerStats = stats;
+            playerCharacter = {
+                name: playerName,
+                stats: stats,
+                skills: skills,
+                background: '普通人',
+                positiveTraits: [],
+                negativeTraits: []
+            };
+        }
+        
+        // 检查普通彩蛋（仅提示）
+        if (!isEasterEgg && easterEggRoles[playerName]) {
             isEasterEgg = true;
             easterEggRole = playerName;
             alert('🎉 彩蛋解锁:' + playerName + '\n身份:' + easterEggRoles[playerName]);
