@@ -2331,11 +2331,17 @@ function loadScene(sceneId) {
         return;
     }
     
-    // 显示对话
+    // 显示第一句对话
     showDialogue(scene.dialogues[0]);
+    dialogueIndex = 0;
     
-    // 隐藏选项，等对话播放完再显示
-    document.getElementById('choices-container').style.display = 'none';
+    // 如果只有一句对话且有选项，直接显示
+    if (scene.dialogues.length === 1 && scene.choices) {
+        showChoices(scene.choices);
+        if (sceneId === 'start') {
+            addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
+        }
+    }
 }
 
 function showDialogue(dialogue) {
