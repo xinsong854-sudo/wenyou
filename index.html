@@ -2894,14 +2894,10 @@ function showCheckResult(check) {
 }
 
 function confirmName() {
-    console.log('confirmName called');
     try {
         const input = document.getElementById('player-name-input');
         const nameValue = input.value.trim();
         
-        console.log('输入名字:', nameValue);
-        
-        // 输入验证：不能为空
         if (!nameValue || nameValue.length === 0) {
             alert('⚠️ 请输入你的名字！');
             input.focus();
@@ -2909,38 +2905,26 @@ function confirmName() {
         }
         
         playerName = nameValue;
-        console.log('playerName 设置:', playerName);
         
-        // 检查是否是官方角色
+        // 检查彩蛋（仅提示，不改变属性）
         const officialChar = worldData.characters.find(c => 
             c.name === playerName || (c.alias && c.alias.includes(playerName))
         );
         
         if (officialChar) {
-            console.log('官方角色:', officialChar.name);
             isEasterEgg = true;
             easterEggRole = playerName;
-            playerStats = { ...officialChar.stats };
             alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + officialChar.background);
-        } else {
-            console.log('普通角色');
-            if (easterEggRoles[playerName]) {
-                isEasterEgg = true;
-                easterEggRole = playerName;
-                alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + easterEggRoles[playerName]);
-            }
+        } else if (easterEggRoles[playerName]) {
+            isEasterEgg = true;
+            easterEggRole = playerName;
+            alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + easterEggRoles[playerName]);
         }
         
-        console.log('隐藏标题界面');
+        // 隐藏标题界面，直接开始游戏
         document.getElementById('title-screen').style.display = 'none';
-        
-        console.log('显示对话框');
         document.getElementById('dialogue-box').style.display = 'block';
-        
-        console.log('加载 start 场景');
         loadScene('start');
-        
-        console.log('游戏启动完成');
     } catch(e) {
         console.error('confirmName error:', e);
         alert('错误：' + e.message);
