@@ -2250,6 +2250,49 @@ function addItem(item) {
     }
 }
 
+
+// 游戏启动函数
+function showNameInput() {
+    console.log('showNameInput called');
+    try {
+        document.getElementById('start-btn').style.display = 'none';
+        document.getElementById('name-input-container').style.display = 'flex';
+        document.getElementById('player-name-input').focus();
+    } catch(e) {
+        console.error('showNameInput error:', e);
+        alert('错误：' + e.message);
+    }
+}
+
+function confirmName() {
+    console.log('confirmName called');
+    try {
+        const input = document.getElementById('player-name-input');
+        playerName = input.value.trim() || '林晓';
+        
+        // 检查彩蛋
+        if (easterEggRoles[playerName]) {
+            isEasterEgg = true;
+            easterEggRole = playerName;
+            alert('彩蛋解锁：' + playerName);
+        }
+        
+        document.getElementById('title-screen').style.display = 'none';
+        document.getElementById('dialogue-box').style.display = 'block';
+        loadScene('start');
+    } catch(e) {
+        console.error('confirmName error:', e);
+        alert('错误：' + e.message);
+    }
+}
+
+function showTitle() {
+    document.getElementById('ending-screen').style.display = 'none';
+    document.getElementById('dialogue-box').style.display = 'none';
+    document.getElementById('choices-container').style.display = 'none';
+    document.getElementById('title-screen').style.display = 'flex';
+}
+
 function showPhone() {
     document.getElementById('phone-ui').style.display = 'block';
     updatePhoneTime();
