@@ -2377,14 +2377,22 @@ function nextDialogue() {
     const scene = scenes[currentScene];
     if (!scene) return;
     
-    // 隐藏选项
-    document.getElementById('choices-container').style.display = 'none';
+    // 如果有选项且已经显示，不要隐藏（让玩家点击）
+    const choicesContainer = document.getElementById('choices-container');
+    if (scene.choices && choicesContainer.style.display === 'flex') {
+        return; // 选项已显示，等待玩家点击
+    }
     
     dialogueIndex++;
     if (dialogueIndex < scene.dialogues.length) {
         showDialogue(scene.dialogues[dialogueIndex]);
+        // 在最后一句对话后显示选项
         if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
             showChoices(scene.choices);
+            // 特殊处理：start 场景获得纸条
+            if (currentScene === 'start') {
+                addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
+            }
         }
     }
 }
@@ -2504,67 +2512,15 @@ function addPhoneButton() {
 }
 
 // 核心游戏函数
-function loadScene(sceneId) {
-    const scene = scenes[sceneId];
-    if (!scene) { console.error('Scene not found:', sceneId); return; }
-    currentScene = sceneId;
-    dialogueIndex = 0;
-    const bg = document.getElementById('background');
-    bg.className = 'bg-' + (scene.bg || 'office');
-    if (scene.ending) { showEnding(scene); return; }
-    showDialogue(scene.dialogues[0]);
-    // 选项在对话播放完后显示，由 nextDialogue 控制
-    // if (scene.choices) showChoices(scene.choices);
-}
 
-function showDialogue(dialogue) {
-    document.getElementById('speaker-name').textContent = dialogue.speaker || '';
-    document.getElementById('dialogue-text').innerHTML = (dialogue.text || '').replace(/\n/g, '<br>');
-    document.getElementById('dialogue-box').style.display = 'block';
-}
 
-function showChoices(choices) {
-    const container = document.getElementById('choices-container');
-    container.innerHTML = '';
-    choices.forEach(choice => {
-        const btn = document.createElement('button');
-        btn.className = 'choice-btn';
-        btn.textContent = choice.text;
-        btn.onclick = (e) => { e.stopPropagation(); if (choice.next) loadScene(choice.next); };
-        container.appendChild(btn);
-    });
-    container.style.display = 'flex';
-}
 
-function nextDialogue() {
-    const scene = scenes[currentScene];
-    if (!scene) return;
-    document.getElementById('choices-container').style.display = 'none';
-    dialogueIndex++;
-    if (dialogueIndex < scene.dialogues.length) {
-        showDialogue(scene.dialogues[dialogueIndex]);
-        // 在最后一句对话后显示选项
-        if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
-            showChoices(scene.choices);
-            // 特殊处理：start 场景获得纸条
-            if (currentScene === 'start') {
-                addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
-            }
-        }
-    }
-}
 
-function showEnding(scene) {
-    const endingScreen = document.getElementById('ending-screen');
-    let text = scene.endingText.replace(/你/g, playerName);
-    let title = scene.endingTitle.replace(/你/g, playerName);
-    if (isEasterEgg) { title = '🎉 ' + title; text = '【彩蛋：' + easterEggRoles[easterEggRole] + '】\n\n' + text; }
-    const icons = { 'bad': '💀', 'normal': '🌅', 'true': '⭐' };
-    document.getElementById('ending-title').innerHTML = (icons[scene.endingType] || '🎭') + ' ' + title;
-    document.getElementById('ending-title').className = 'ending-' + scene.endingType;
-    document.getElementById('ending-content').innerHTML = text.replace(/\n/g, '<br>');
-    endingScreen.style.display = 'flex';
-}
+
+
+
+
+
 </script>
 </body>
 </html>
