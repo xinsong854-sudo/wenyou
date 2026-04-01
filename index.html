@@ -669,6 +669,27 @@ const scenes = {
         ],
         choices: [
             { text: '🏪 去商场，人多', next: 'go_mall' },
+            { text: '🏠 回家，先躲起来', next: 'hide_home' },
+            { text: '🍀 幸运逃脱 - LUK 检定', next: 'luk_check_escape', onclick: 'doLukCheckEscape()' }
+        ]
+    },
+    'luk_check_escape': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '系统', text: '🎲 幸运检定...' },
+            { speaker: '我', text: '（我只能相信命运了...）' }
+        ],
+        choices: [
+            { text: '查看结果', next: 'luk_result_escape' }
+        ]
+    },
+    'luk_result_escape': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '系统', text: '检定结果已应用' }
+        ],
+        choices: [
+            { text: '🏪 去商场，人多', next: 'go_mall' },
             { text: '🏠 回家，先躲起来', next: 'hide_home' }
         ]
     },
@@ -2988,12 +3009,10 @@ function doSanCheckHome() {
     let result;
     if (roll <= 5) {
         result = '大成功';
-        // 大成功→ending_mastermind
         loadScene('ending_mastermind');
         return;
     } else if (roll >= 96) {
         result = '大失败';
-        // 大失败→ending_paranoia
         loadScene('ending_paranoia');
         return;
     } else if (roll <= san + skill - dc + 50) {
@@ -3014,6 +3033,48 @@ function doSanCheckHome() {
         targetValue: san + skill,
         result: result,
         description: '冷静分析当前局势'
+    });
+}
+
+// LUK 检定函数（escape_office 后）
+function doLukCheckEscape() {
+    if (!playerCharacter) return;
+    
+    const luk = playerCharacter.stats.LUK;
+    const skill = playerCharacter.skills.生存 || 0;
+    const dc = 60;
+    const roll = Math.floor(Math.random() * 100) + 1;
+    
+    let result;
+    if (roll <= 5) {
+        result = '大成功';
+        // 大成功→轻松逃脱 + 发现秘密
+        alert('🍀 大成功！你如有神助，轻松逃脱，还意外发现了伪人的秘密基地位置！');
+    } else if (roll >= 96) {
+        result = '大失败';
+        // 大失败→ending_unlucky
+        loadScene('ending_unlucky');
+        return;
+    } else if (roll <= luk + skill - dc + 50) {
+        result = '成功';
+        alert('✅ 成功！你幸运地逃脱了。');
+    } else {
+        result = '失败';
+        alert('❌ 失败！你差点被抓，但还是逃掉了。');
+    }
+    
+    window.lastCheckResult = result;
+    
+    showCheckResult({
+        attribute: 'LUK',
+        attrValue: luk,
+        skill: '生存',
+        skillValue: skill,
+        dc: dc,
+        roll: roll,
+        targetValue: luk + skill,
+        result: result,
+        description: '幸运逃脱'
     });
 }
 
