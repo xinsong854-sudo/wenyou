@@ -2321,6 +2321,9 @@ function loadScene(sceneId) {
     currentScene = sceneId;
     dialogueIndex = 0;
     
+    // 隐藏选项容器，等新对话播放完再显示
+    document.getElementById('choices-container').style.display = 'none';
+    
     // 设置背景
     const bg = document.getElementById('background');
     bg.className = 'bg-' + (scene.bg || 'office');
