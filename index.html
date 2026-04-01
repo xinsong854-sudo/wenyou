@@ -320,7 +320,7 @@ const scenes = {
         bg: 'bg-office',
         dialogues: [
             { speaker: '我', text: '（在这破公司干了三年。）' },
-            { speaker: '我', text: '我叫' + playerName + '。至少...目前还是这个名字。' },
+            { speaker: '我', text: '我叫' + playerName + '，至少……目前还是这个名字。' },
             { speaker: '我', text: '但最近...我发现同事们有些不对劲。' },
             { speaker: '我', text: '张明眨眼太规律了，像设定好的程序。李雨说话总是重复最后一句话。王医生...他的眼神太冷了。' },
             { speaker: '我', text: '直到那天，我在张明的桌子上发现了一张纸条...' }
@@ -2347,8 +2347,20 @@ function showDialogue(dialogue) {
     const speakerEl = document.getElementById('speaker-name');
     const textEl = document.getElementById('dialogue-text');
     
-    speakerEl.textContent = dialogue.speaker || '';
+    // 如果说话者是"我"，显示玩家名字
+    let speakerName = dialogue.speaker || '';
+    if (speakerName === '我' && playerName) {
+        speakerName = playerName;
+    }
+    speakerEl.textContent = speakerName;
+    
     currentText = dialogue.text || '';
+    
+    // 将对话中的"我"替换为玩家名字（但保留引号内的"我"和固定表达）
+    if (playerName) {
+        // 替换句首的"我"和括号内的"我"
+        currentText = currentText.replace(/（我/g, '（' + playerName).replace(/我/g, playerName);
+    }
     
     // 简单显示，不打字机效果
     textEl.innerHTML = currentText.replace(/\n/g, '<br>');
