@@ -2917,36 +2917,21 @@ function confirmName() {
             // 是官方角色，自动填充属性
             isEasterEgg = true;
             easterEggRole = playerName;
-            
-            // 使用官方角色的属性
             playerStats = { ...officialChar.stats };
-            playerBackground = { name: officialChar.background, bonus: {}, ability: '官方角色' };
-            
-            alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + officialChar.background + '\n\n属性已根据角色设定自动填充！');
-            
-            // 隐藏标题界面，显示车卡界面（已填充）
-            document.getElementById('title-screen').style.display = 'none';
-            document.getElementById('character-creation').style.display = 'flex';
-            
-            // 更新 UI 显示
-            renderStats();
-            document.getElementById('background-select').value = 0;
+            alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + officialChar.background);
         } else {
-            // 不是官方角色，正常车卡
-            // 检查普通彩蛋
+            // 不是官方角色，检查普通彩蛋
             if (easterEggRoles[playerName]) {
                 isEasterEgg = true;
                 easterEggRole = playerName;
                 alert('🎉 彩蛋解锁：' + playerName + '\n身份：' + easterEggRoles[playerName]);
             }
-            
-            // 隐藏标题界面，显示车卡界面
-            document.getElementById('title-screen').style.display = 'none';
-            document.getElementById('character-creation').style.display = 'flex';
-            
-            // 初始化车卡
-            initCharacterCreation();
         }
+        
+        // 隐藏标题界面，直接开始游戏
+        document.getElementById('title-screen').style.display = 'none';
+        document.getElementById('dialogue-box').style.display = 'block';
+        loadScene('start');
     } catch(e) {
         console.error('confirmName error:', e);
         alert('错误：' + e.message);
