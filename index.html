@@ -235,6 +235,33 @@
         <div id="continue-indicator">▼</div>
     </div>
     <div id="choices-container"></div>
+
+<!-- 检定 UI -->
+<div id="check-ui" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:100; text-align:center;">
+    <div style="background:rgba(20,20,40,0.98); border:3px solid #4ecdc4; border-radius:20px; padding:30px; min-width:400px; box-shadow:0 0 50px rgba(78,205,196,0.5);">
+        <h2 style="color:#4ecdc4; margin-bottom:20px; font-size:28px;">🎲 检定</h2>
+        <div id="check-description" style="color:#aaa; margin-bottom:20px; font-size:16px;"></div>
+        <div style="display:flex; justify-content:space-around; margin-bottom:20px;">
+            <div style="text-align:center;">
+                <div style="color:#7a7aaa; font-size:14px;">属性</div>
+                <div id="check-attr" style="color:#fff; font-size:24px; font-weight:bold;">--</div>
+            </div>
+            <div style="text-align:center;">
+                <div style="color:#7a7aaa; font-size:14px;">技能</div>
+                <div id="check-skill" style="color:#fff; font-size:24px; font-weight:bold;">--</div>
+            </div>
+            <div style="text-align:center;">
+                <div style="color:#7a7aaa; font-size:14px;">DC</div>
+                <div id="check-dc" style="color:#ff6b6b; font-size:24px; font-weight:bold;">--</div>
+            </div>
+        </div>
+        <div id="check-result" style="font-size:48px; font-weight:bold; margin-bottom:20px; text-shadow:0 0 20px currentColor;"></div>
+        <div style="display:flex; justify-content:space-around; color:#aaa;">
+            <div>骰子：<span id="check-roll" style="color:#fff;">--</span>/100</div>
+            <div>目标：<span id="check-target" style="color:#fff;">--</span></div>
+        </div>
+    </div>
+</div>
     
     <div id="phone-ui">
         <button class="phone-close" onclick="closePhone()">×</button>
@@ -2518,6 +2545,43 @@ function rollCheck(attribute, skill, dc, description) {
         result,
         description
     };
+}
+
+// 显示检定结果 UI
+function showCheckResult(check) {
+    const ui = document.getElementById('check-ui');
+    const attrLabels = { SAN: '理智', INS: '洞察', DIS: '伪装', LUK: '幸运', SUR: '生存' };
+    
+    document.getElementById('check-description').textContent = check.description;
+    document.getElementById('check-attr').textContent = attrLabels[check.attribute] + ' ' + check.attrValue;
+    document.getElementById('check-skill').textContent = check.skill + ' ' + check.skillValue;
+    document.getElementById('check-dc').textContent = 'DC' + check.dc;
+    document.getElementById('check-roll').textContent = check.roll;
+    document.getElementById('check-target').textContent = check.targetValue;
+    
+    const resultEl = document.getElementById('check-result');
+    if (check.result === '大成功') {
+        resultEl.textContent = '🎉 大成功！';
+        resultEl.style.color = '#ffe66d';
+    } else if (check.result === '成功') {
+        resultEl.textContent = '✅ 成功';
+        resultEl.style.color = '#4ecdc4';
+    } else if (check.result === '失败') {
+        resultEl.textContent = '❌ 失败';
+        resultEl.style.color = '#ff6b6b';
+    } else {
+        resultEl.textContent = '💀 大失败！';
+        resultEl.style.color = '#ff0000';
+    }
+    
+    ui.style.display = 'block';
+    
+    // 3 秒后自动隐藏
+    setTimeout(() => {
+        ui.style.display = 'none';
+    }, 3000);
+    
+    return check.result;
 }
 
 function confirmName() {
