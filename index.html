@@ -33,7 +33,12 @@
         .panel-btn { background: #3a3a5a; border: 1px solid #5a5a7a; border-radius: 8px; padding: 10px 25px; color: #fff; cursor: pointer; }
         #title-screen { position: absolute; width: 100%; height: 100%; background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         #title-screen h1 { font-size: 48px; color: #7a7aaa; margin-bottom: 20px; }
-        #title-screen .subtitle { font-size: 18px; color: #5a5a7a; margin-bottom: 40px; }
+        #title-screen .subtitle { font-size: 18px; color: #5a5a7a; margin-bottom: 20px; }
+        #name-input-container { display: none; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        #name-input-container.show { display: flex; }
+        #player-name-input { background: rgba(30,30,50,0.8); border: 2px solid #5a5a7a; border-radius: 8px; padding: 12px 20px; color: #fff; font-size: 16px; width: 250px; text-align: center; margin-bottom: 15px; }
+        #player-name-input:focus { outline: none; border-color: #7a7aaa; }
+        .name-hint { font-size: 12px; color: #5a5a7a; margin-top: 10px; }
         .title-btn { background: #3a3a5a; border: 2px solid #5a5a7a; border-radius: 10px; padding: 15px 50px; color: #fff; font-size: 18px; cursor: pointer; margin: 10px; }
         .title-btn:hover { background: #4a4a6a; border-color: #7a7aaa; }
         #ending-screen { position: absolute; width: 100%; height: 100%; background: #000; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
@@ -61,7 +66,12 @@
     <div id="title-screen">
         <h1>🎭 伪人大本营</h1>
         <p class="subtitle">你能识破伪装者吗？</p>
-        <button class="title-btn" onclick="startGame()">▶️ 开始游戏</button>
+        <div id="name-input-container">
+            <input type="text" id="player-name-input" placeholder="输入你的名字" maxlength="10">
+            <button class="title-btn" onclick="confirmName()">✅ 确认</button>
+            <p class="name-hint">💡 输入特定角色名有彩蛋哦~</p>
+        </div>
+        <button class="title-btn" id="start-btn" onclick="showNameInput()">▶️ 开始游戏</button>
         <button class="title-btn" onclick="showLoadPanel()">📂 继续游戏</button>
     </div>
     <div id="ending-screen">
@@ -84,6 +94,25 @@
     </div>
 </div>
 <script>
+// 玩家名字和彩蛋系统
+let playerName = '林晓';
+let isEasterEgg = false;
+let easterEggRole = '';
+
+// 彩蛋角色列表（伪人大本营相关）
+const easterEggRoles = {
+    '张明': '同事·伪人',
+    '李雨': '邻居·猎人',
+    '王医生': '医生·伪人高层',
+    '林晓': '主角·幸存者',
+    '神秘人': '猎人组织成员',
+    '猎人': '猎人组织',
+    '伪人': '？？？',
+    '大本营': '伪人基地',
+    '同化': '转化过程',
+    '克隆': '实验项目'
+};
+
 const scenes = {
     'start': {
         bg: 'bg-office',
@@ -1865,10 +1894,34 @@ let isTyping = false;
 let typingTimer = null;
 let currentText = '';
 
-function startGame() {
+function showNameInput() {
+    document.getElementById('start-btn').style.display = 'none';
+    document.getElementById('name-input-container').classList.add('show');
+    document.getElementById('player-name-input').focus();
+}
+
+function confirmName() {
+    const input = document.getElementById('player-name-input');
+    const name = input.value.trim() || '林晓';
+    playerName = name;
+    
+    // 检查彩蛋
+    for (const [role, title] of Object.entries(easterEggRoles)) {
+        if (name.includes(role)) {
+            isEasterEgg = true;
+            easterEggRole = role;
+            alert('🎉 彩蛋解锁！\n你选择扮演：' + role + '（' + title + '）\n游戏中会有特殊对话哦~');
+            break;
+        }
+    }
+    
     document.getElementById('title-screen').style.display = 'none';
     document.getElementById('dialogue-box').style.display = 'block';
     loadScene('start');
+}
+
+function startGame() {
+    showNameInput();
 }
 
 function loadScene(sceneId) {
@@ -1893,10 +1946,38 @@ function showDialogue() {
         }
         return;
     }
-    const dialogue = scene.dialogues[dialogueIndex];
-    document.getElementById('speaker-name').textContent = dialogue.speaker;
-    currentText = dialogue.text;
-    typeText(dialogue.text);
+    let dialogue = scene.dialogues[dialogueIndex];
+    
+    // 替换主角名字
+    let speaker = dialogue.speaker;
+    let text = dialogue.text;
+    if (speaker === '我') {
+        speaker = playerName;
+    }
+    text = text.replace(/我/g, playerName);
+    
+    // 彩蛋特殊对话
+    if (isEasterEgg && easterEggRole) {
+        if (easterEggRole === '张明' && scene.bg === 'bg-office') {
+            text = '【彩蛋】' + text + ' （作为伪人，你感到有趣...）';
+        } else if (easterEggRole === '李雨') {
+            text = '【彩蛋】' + text + ' （猎人的直觉在 alert 你...）';
+        } else if (easterEggRole === '王医生') {
+            text = '【彩蛋】' + text + ' （同化实验需要新样本...）';
+        } else if (easterEggRole === '神秘人' || easterEggRole === '猎人') {
+            text = '【彩蛋】' + text + ' （猎人的本能让你警惕...）';
+        } else if (easterEggRole === '伪人' || easterEggRole === '同化') {
+            text = '【彩蛋】' + text + ' （你感到同类的气息...）';
+        } else if (easterEggRole === '大本营') {
+            text = '【彩蛋】' + text + ' （回家的感觉...）';
+        } else if (easterEggRole === '克隆') {
+            text = '【彩蛋】' + text + ' （你看到了无数个"自己"...）';
+        }
+    }
+    
+    document.getElementById('speaker-name').textContent = speaker;
+    currentText = text;
+    typeText(text);
 }
 
 function typeText(text) {
@@ -1948,9 +2029,19 @@ function showEnding(scene) {
     document.getElementById('dialogue-box').style.display = 'none';
     document.getElementById('choices-container').style.display = 'none';
     const endingScreen = document.getElementById('ending-screen');
+    
+    let endingText = scene.endingText;
+    // 替换结局中的"你"为玩家名字
+    endingText = endingText.replace(/你/g, playerName);
+    
+    // 彩蛋特殊结局
+    if (isEasterEgg) {
+        endingText = '🎉 【彩蛋角色：' + easterEggRole + '】\n\n' + endingText;
+    }
+    
     document.getElementById('ending-title').textContent = scene.endingTitle;
     document.getElementById('ending-title').className = 'ending-' + scene.endingType;
-    document.getElementById('ending-content').textContent = scene.endingText;
+    document.getElementById('ending-content').textContent = endingText;
     endingScreen.style.display = 'flex';
 }
 
@@ -1962,7 +2053,14 @@ function showTitle() {
 }
 
 function saveGame(slot) {
-    const data = { scene: currentScene, dialogue: dialogueIndex, time: new Date().toLocaleString() };
+    const data = { 
+        scene: currentScene, 
+        dialogue: dialogueIndex, 
+        time: new Date().toLocaleString(),
+        playerName: playerName,
+        isEasterEgg: isEasterEgg,
+        easterEggRole: easterEggRole
+    };
     localStorage.setItem('pseudoSave' + slot, JSON.stringify(data));
     renderSaveSlots();
 }
@@ -1971,6 +2069,9 @@ function loadGame(slot) {
     const data = localStorage.getItem('pseudoSave' + slot);
     if (data) {
         const parsed = JSON.parse(data);
+        playerName = parsed.playerName || '林晓';
+        isEasterEgg = parsed.isEasterEgg || false;
+        easterEggRole = parsed.easterEggRole || '';
         document.getElementById('title-screen').style.display = 'none';
         document.getElementById('dialogue-box').style.display = 'block';
         loadScene(parsed.scene);
@@ -2003,7 +2104,8 @@ function renderSaveSlots(isSave) {
         slot.className = 'save-slot';
         if (data) {
             const parsed = JSON.parse(data);
-            slot.innerHTML = '<div class="slot-number">存档 ' + i + '</div><div class="slot-info">' + parsed.scene + '</div><div class="slot-time">' + parsed.time + '</div>';
+            const eeTag = parsed.isEasterEgg ? ' 🎉' : '';
+            slot.innerHTML = '<div class="slot-number">存档 ' + i + '</div><div class="slot-info">' + (parsed.playerName || '林晓') + eeTag + '</div><div class="slot-time">' + parsed.time + '</div>';
         } else {
             slot.innerHTML = '<div class="slot-number">存档 ' + i + '</div><div class="slot-info">空</div>';
         }
@@ -2015,6 +2117,13 @@ function renderSaveSlots(isSave) {
         container.appendChild(slot);
     }
 }
+
+// 名字输入框回车确认
+document.getElementById('player-name-input').addEventListener('keydown', (e) => {
+    if (e.code === 'Enter') {
+        confirmName();
+    }
+});
 
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' || e.code === 'Enter') {
