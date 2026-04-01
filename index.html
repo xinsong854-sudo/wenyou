@@ -2383,27 +2383,35 @@ function nextDialogue() {
     const scene = scenes[currentScene];
     if (!scene) return;
     
+    console.log('nextDialogue:', 'scene=', currentScene, 'dialogueIndex=', dialogueIndex, 'total=', scene.dialogues.length);
+    
     const choicesContainer = document.getElementById('choices-container');
     
     // 如果选项已经显示，不要隐藏（让玩家点击）
     if (scene.choices && choicesContainer.style.display === 'flex') {
+        console.log('选项已显示，返回');
         return;
     }
     
     dialogueIndex++;
+    console.log('dialogueIndex++ 后=', dialogueIndex);
     
     // 检查是否还有下一句对话
     if (dialogueIndex < scene.dialogues.length) {
         showDialogue(scene.dialogues[dialogueIndex]);
+        console.log('显示对话', dialogueIndex);
         
         // 如果是最后一句对话且有选项，显示选项
         if (scene.choices && dialogueIndex === scene.dialogues.length - 1) {
+            console.log('显示选项！');
             showChoices(scene.choices);
             // start 场景获得纸条
             if (currentScene === 'start') {
                 addItem({id:'note',name:'📜 生存指南',desc:'伪人识别方法和生存规则'});
             }
         }
+    } else {
+        console.log('dialogueIndex >= dialogues.length，不显示更多对话');
     }
 }
 
