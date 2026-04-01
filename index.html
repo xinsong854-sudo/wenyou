@@ -99,18 +99,109 @@ let playerName = '林晓';
 let isEasterEgg = false;
 let easterEggRole = '';
 
-// 彩蛋角色列表（伪人大本营相关）
+// 彩蛋角色列表（伪人大本营世界观内）
 const easterEggRoles = {
-    '张明': '同事·伪人',
-    '李雨': '邻居·猎人',
-    '王医生': '医生·伪人高层',
+    '营长': '槐安公寓楼长·督察者',
+    '张明': '伪人·同事',
+    '李雨': '猎人·邻居',
+    '王医生': '瘟疫医生·伪人高层',
     '林晓': '主角·幸存者',
-    '神秘人': '猎人组织成员',
-    '猎人': '猎人组织',
-    '伪人': '？？？',
-    '大本营': '伪人基地',
-    '同化': '转化过程',
-    '克隆': '实验项目'
+    '猎人': '猎人公会成员',
+    '伪人': '里界生物',
+    '黎守': '调查局成员',
+    '对伪课': '特别武装单位',
+    'ABSC': '里界调查委员会',
+    '绿洲': '神秘学科研组织',
+    '槐安': '槐安公寓住户',
+    '公寓': '伪人聚落',
+    '哨站': '两界交流场所',
+    '灯塔': '伪人学校学生',
+    '教廷': '西陆宗教人士',
+    '伪神': '被供奉的伪人',
+    '里界': '异空间存在',
+    '门': '空间连接口',
+    '伪物': '里界物品使用者',
+    '化而为': '史莱姆伪人',
+    '西瓜人': '西瓜公司董事',
+    '涂改': '完美主义者',
+    '牺牲': '古祭祭司',
+    '兔仙': '茶居公寓楼长',
+    '云蓝': '手偶少女',
+    '江安': '温柔治愈者',
+    '赫卡忒': '仿生人',
+    '亚契': '炼金术师',
+    '特洛菲': '人监之口',
+    '洛洛': '人监之口',
+    '独允': 'AI 核心',
+    'AT': '奇迹伪神',
+    '艾尔伯特': '先驱者',
+    '福音': '济世者伪神',
+    '安布罗斯': '神裔',
+    '约斯密特': '傀儡师',
+    '渔夫': '利维坦',
+    '汐': '鲛人',
+    '涟': '鲛人',
+    '多虫': '虫群',
+    '人魈': '怪原生',
+    '凝胶': '随心史莱姆',
+    '拟人蝎': '巢穴蝎娘',
+    '伊露': '面具收集者',
+    '春山抚子': '天风阁执事',
+    '小赤帽': '狼影清洁工',
+    '笑颜': '人偶',
+    '长喙': '说书人',
+    '红缇香': '阴婚新娘',
+    '伽纳罗丝': '血液生物',
+    '墨水夜': '水池居民',
+    '石测': '石头美食家',
+    '大夜夜': '服装设计师',
+    '鸿': '编辑记者',
+    '绫希': '月之投影',
+    '瓦莉奥尔': '战斗者',
+    '折纸簌鸟': '大排档老板',
+    '虫者': '电影院售票员',
+    '单先生': '电影院院长',
+    '非常玦蝶': '二营长·清劣者',
+    '温塔莎': '基质龙',
+    '17.3 赫兹': 'AI 核心',
+    'X': '生骸',
+    '深破': '方块女孩',
+    '希庇安': '骑士',
+    '无名卿': '外来者',
+    '因法勒': '混乱态',
+    '阿秋': '人监成员',
+    '冷寂': '上古存在',
+    '荆千棘': '蔷薇助手',
+    '落嵛': '公寓住户',
+    '绊': '公寓住户',
+    'puzzle': '公寓住户',
+    '迷迭香': '公寓住户',
+    '桃桃': '公寓住户',
+    '玄弦若离': '公寓住户',
+    '忘光': '公寓住户',
+    '行粥': '公寓住户',
+    '江小楠': '公寓住户',
+    'viole': '公寓住户',
+    '奥特娜特': '公寓住户',
+    '可可': '公寓住户',
+    '赫木祀夜': '公寓住户',
+    '恶堕莉莉丝': '公寓住户',
+    '泡泡': '公寓住户',
+    '月汐': '公寓住户',
+    '松下': '猫耳伪人',
+    '科拉松': '公寓住户',
+    '西西': '公寓住户',
+    '赫敏': '公寓住户',
+    '卜焕汣': '公寓住户',
+    '蠹鱼': '公寓住户',
+    '七点半': '公寓住户',
+    '渡潵': '公寓住户',
+    '零': '公寓住户',
+    '百合': '公寓住户',
+    '绯红晴': '公寓住户',
+    '陆玖': '多面孔伪人',
+    'Aurora': '锅炉房居民',
+    '伊莱亚斯': '福利院设立者'
 };
 
 const scenes = {
@@ -1353,12 +1444,28 @@ const scenes = {
     'call_110': {
         bg: 'bg-home',
         dialogues: [
-            { speaker: '我', text: '（我报警了...）' },
-            { speaker: '警察', text: '【电话】我们马上到！' }
+            { speaker: '我', text: '（我颤抖着拨通了 110...）' },
+            { speaker: '警察', text: '【电话】您好，请问有什么紧急情况？' },
+            { speaker: '我', text: '我家...有人要伤害我！请快来！' },
+            { speaker: '警察', text: '【电话】请保持冷静，我们马上派警力过去！' }
         ],
         choices: [
             { text: '等待警察', next: 'wait_police' },
             { text: '自己先跑', next: 'run_first' }
+        ]
+    },
+    'call_police': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我找到公用电话，拨通了报警电话...）' },
+            { speaker: '警察', text: '【电话】您好，这里是 110 报警中心。' },
+            { speaker: '我', text: '我要报案！有人在跟踪我，他们不是正常人！' },
+            { speaker: '警察', text: '【电话】（沉默片刻）...女士，您现在在哪里？' },
+            { speaker: '我', text: '（他们的语气...好像不相信我？）' }
+        ],
+        choices: [
+            { text: '告诉地址等警察', next: 'wait_police_end' },
+            { text: '挂断自己跑', next: 'run_first' }
         ]
     },
     'shocked_clone': {
@@ -1876,7 +1983,62 @@ const scenes = {
             { text: '被抓', next: 'ending_captured' }
         ]
     },
+    'call_110': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我拨打了 110...）' },
+            { speaker: '警察', text: '【电话】您好，请问有什么紧急情况？' },
+            { speaker: '我', text: '（我该怎么说？他们会相信伪人的存在吗？）' }
+        ],
+        choices: [
+            { text: '说实话', next: 'police_truth' },
+            { text: '编个理由', next: 'police_lie' }
+        ]
+    },
+    'escape_office_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我逃出了办公室！）' },
+            { speaker: '我', text: '（张明在后面追...）' }
+        ],
+        choices: [
+            { text: '躲进人群', next: 'hide_crowd' },
+            { text: '联系猎人', next: 'contact_hunter' }
+        ]
+    },
+    'escape_zhang_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我从张明那里逃跑了！）' },
+            { speaker: '张明', text: '你逃不掉的...' }
+        ],
+        choices: [
+            { text: '甩掉他', next: 'shake_off' },
+            { text: '反击', next: 'fight_back' }
+        ]
+    },
+    'solo_action_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我决定独自行动...）' }
+        ],
+        choices: [
+            { text: '成功', next: 'ending_hide' },
+            { text: '失败', next: 'ending_captured' }
+        ]
+    },
+    'solo_action_3': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我自己行动...）' }
+        ],
+        choices: [
+            { text: '成功', next: 'ending_survivor' },
+            { text: '失败', next: 'ending_captured' }
+        ]
+    },
     'escape_clone': {
+
         bg: 'bg-street',
         dialogues: [
             { speaker: '我', text: '（我从克隆室逃跑！）' }
@@ -1956,22 +2118,39 @@ function showDialogue() {
     }
     text = text.replace(/我/g, playerName);
     
-    // 彩蛋特殊对话
+    // 彩蛋特殊对话（伪人大本营世界观）
     if (isEasterEgg && easterEggRole) {
-        if (easterEggRole === '张明' && scene.bg === 'bg-office') {
-            text = '【彩蛋】' + text + ' （作为伪人，你感到有趣...）';
-        } else if (easterEggRole === '李雨') {
-            text = '【彩蛋】' + text + ' （猎人的直觉在 alert 你...）';
-        } else if (easterEggRole === '王医生') {
-            text = '【彩蛋】' + text + ' （同化实验需要新样本...）';
-        } else if (easterEggRole === '神秘人' || easterEggRole === '猎人') {
-            text = '【彩蛋】' + text + ' （猎人的本能让你警惕...）';
-        } else if (easterEggRole === '伪人' || easterEggRole === '同化') {
-            text = '【彩蛋】' + text + ' （你感到同类的气息...）';
-        } else if (easterEggRole === '大本营') {
-            text = '【彩蛋】' + text + ' （回家的感觉...）';
-        } else if (easterEggRole === '克隆') {
-            text = '【彩蛋】' + text + ' （你看到了无数个"自己"...）';
+        // 公寓/哨站相关
+        if (['营长', '槐安', '公寓', '特洛菲', '洛洛', '化而为', '西瓜人', '涂改', '牺牲', '兔仙', '云蓝', '江安', '赫卡忒', '亚契', '荆千棘', '墨水夜', '石测', '大夜夜', '长喙', '红缇香', '伽纳罗丝', '笑颜', '小赤帽', '伊露', '春山抚子', '陆玖', 'Aurora', '伊莱亚斯', '落嵛', '绊', 'puzzle', '迷迭香', '桃桃', '玄弦若离', '忘光', '行粥', '江小楠', 'viole', '奥特娜特', '可可', '赫木祀夜', '恶堕莉莉丝', '泡泡', '月汐', '松下', '科拉松', '西西', '赫敏', '卜焕汣', '蠹鱼', '七点半', '渡潵', '零', '百合', '绯红晴'].includes(easterEggRole)) {
+            text = '🏠【公寓住户】' + text + ' （这里是伪人的家...）';
+        }
+        // 猎人/黎守相关
+        else if (['猎人', '黎守', '对伪课', '李雨'].includes(easterEggRole)) {
+            text = '🔫【猎人/黎守】' + text + ' （保持警惕，检测伪人...）';
+        }
+        // 伪人相关
+        else if (['伪人', '张明', '王医生', '多虫', '人魈', '凝胶', '拟人蝎'].includes(easterEggRole)) {
+            text = '👁️【伪人】' + text + ' （模仿人类...不能暴露...）';
+        }
+        // 组织相关
+        else if (['ABSC', '绿洲', '教廷', '伪神', 'AT', '艾尔伯特', '福音', '安布罗斯', '约斯密特', '希庇安', '无名卿', '因法勒', '瓦莉奥尔', '绫希', '渔夫', '汐', '涟'].includes(easterEggRole)) {
+            text = '🌐【组织成员】' + text + ' （为了组织的使命...）';
+        }
+        // 里界/门相关
+        else if (['里界', '门', '伪物', '深破', 'X', '冷寂', '17.3 赫兹', '独允'].includes(easterEggRole)) {
+            text = '🌀【里界存在】' + text + ' （门的另一侧...）';
+        }
+        // 哨站/电影院相关
+        else if (['哨站', '灯塔', '非常玦蝶', '单先生', '虫者'].includes(easterEggRole)) {
+            text = '🎬【哨站成员】' + text + ' （欢迎来到非常电影院...）';
+        }
+        // 西陆相关
+        else if (['汉兹安索德', '卡芙涅', '梦之圣庭', '维拉莉娅', '济世者'].includes(easterEggRole)) {
+            text = '⛪【西陆势力】' + text + ' （伪神的意志...）';
+        }
+        // 其他伪人角色
+        else {
+            text = '🎭【' + easterEggRole + '】' + text;
         }
     }
     
@@ -2025,6 +2204,291 @@ function showChoices(choices) {
     });
 }
 
+    'call_110': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我拨打了 110...）' },
+            { speaker: '警察', text: '【电话】您好，请问有什么紧急情况？' },
+            { speaker: '我', text: '（我该怎么说？他们会相信伪人的存在吗？）' }
+        ],
+        choices: [
+            { text: '说实话', next: 'police_truth' },
+            { text: '编个理由', next: 'police_lie' }
+        ]
+    },
+    'call_police': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我报警了...）' },
+            { speaker: '警察', text: '【电话】我们马上派人过来！' },
+            { speaker: '我', text: '（但警察真的能对付伪人吗？）' }
+        ],
+        choices: [
+            { text: '等待警察', next: 'wait_police' },
+            { text: '自己先跑', next: 'run_first' }
+        ]
+    },
+    'caught_escape': {
+        bg: 'bg-ending',
+        dialogues: [
+            { speaker: '我', text: '（我逃跑时被抓住了...）' },
+            { speaker: '伪人', text: '还想跑？' }
+        ],
+        ending: true, endingType: 'bad', endingTitle: '【结局：被抓】',
+        endingText: '你在逃跑途中被伪人抓获。所有的努力都化为泡影，你将被带往大本营接受同化。'
+    },
+    'caught_station': {
+        bg: 'bg-ending',
+        dialogues: [
+            { speaker: '我', text: '（我在车站被伪人包围了...）' },
+            { speaker: '伪人', text: '想去哪？' }
+        ],
+        ending: true, endingType: 'bad', endingTitle: '【结局：车站】',
+        endingText: '你试图离开城市，但在车站被伪人拦截。他们早就料到了这一步。'
+    },
+    'ending_survivor': {
+        bg: 'bg-ending',
+        dialogues: [
+            { speaker: '我', text: '（我活下来了...）' }
+        ],
+        ending: true, endingType: 'normal', endingTitle: '【结局：幸存者】',
+        endingText: '你成功从伪人的追捕中幸存下来。猎人组织后来找到了你，根据你的情报捣毁了多个伪人据点。你隐姓埋名，开始了新的生活。'
+    },
+    'escape_office_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我逃出了办公室！）' },
+            { speaker: '我', text: '（张明在后面追...）' }
+        ],
+        choices: [
+            { text: '躲进人群', next: 'hide_crowd' },
+            { text: '联系猎人', next: 'contact_hunter' }
+        ]
+    },
+    'escape_zhang_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我从张明那里逃跑了！）' },
+            { speaker: '张明', text: '你逃不掉的...' }
+        ],
+        choices: [
+            { text: '甩掉他', next: 'shake_off' },
+            { text: '反击', next: 'fight_back' }
+        ]
+    },
+    'find_food': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我出来寻找食物...）' },
+            { speaker: '我', text: '（但外面太危险了...）' }
+        ],
+        choices: [
+            { text: '快速返回', next: 'quick_return' },
+            { text: '继续寻找', next: 'keep_search' }
+        ]
+    },
+    'solo_action_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我决定独自行动...）' }
+        ],
+        choices: [
+            { text: '成功', next: 'ending_hide' },
+            { text: '失败', next: 'ending_captured' }
+        ]
+    },
+    'solo_action_3': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我自己行动...）' }
+        ],
+        choices: [
+            { text: '成功', next: 'ending_survivor' },
+            { text: '失败', next: 'ending_captured' }
+        ]
+    },
+    'threat_police': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我威胁要报警...）' },
+            { speaker: '张明', text: '（他笑了）警察？他们帮不了你。' }
+        ],
+        choices: [
+            { text: '真的报警', next: 'call_police' },
+            { text: '虚张声势', next: 'bluff' }
+        ]
+    },
+    'police_truth': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '警察', text: '【电话】...伪人？小姐，你需要心理医生。' },
+            { speaker: '我', text: '（他们不相信我...）' }
+        ],
+        choices: [
+            { text: '挂断', next: 'hang_up' },
+            { text: '继续解释', next: 'keep_explain' }
+        ]
+    },
+    'police_lie': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我编了个入室抢劫的理由...）' },
+            { speaker: '警察', text: '【电话】好的，我们马上派巡逻车过来。' }
+        ],
+        choices: [
+            { text: '等待警察', next: 'wait_police' },
+            { text: '趁机逃跑', next: 'escape_chance' }
+        ]
+    },
+    'hide_crowd': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我躲进人群...）' }
+        ],
+        choices: [
+            { text: '联系猎人', next: 'contact_hunter' },
+            { text: '找地方躲', next: 'find_hide' }
+        ]
+    },
+    'shake_off': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我甩掉了张明！）' }
+        ],
+        choices: [
+            { text: '联系猎人', next: 'ending_hunter' },
+            { text: '躲起来', next: 'ending_hide' }
+        ]
+    },
+    'fight_back': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我决定反击...）' },
+            { speaker: '我', text: '（但我没有武器...）' }
+        ],
+        choices: [
+            { text: '找武器', next: 'find_weapon' },
+            { text: '肉搏', next: 'hand_to_hand' }
+        ]
+    },
+    'quick_return': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我快速返回藏身处...）' }
+        ],
+        choices: [
+            { text: '继续躲', next: 'ending_hide' },
+            { text: '联系猎人', next: 'ending_hunter' }
+        ]
+    },
+    'keep_search': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我继续寻找食物...）' },
+            { speaker: '伪人', text: '（发现了你）找到你了。' }
+        ],
+        choices: [
+            { text: '逃跑', next: 'escape_chance' },
+            { text: '被抓', next: 'ending_captured' }
+        ]
+    },
+    'bluff': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '张明', text: '（他看穿了你的虚张声势）别演了。' },
+            { speaker: '我', text: '（糟了...）' }
+        ],
+        choices: [
+            { text: '逃跑', next: 'escape_chance' },
+            { text: '求饶', next: 'beg_merge' }
+        ]
+    },
+    'hang_up': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我挂断了电话...）' }
+        ],
+        choices: [
+            { text: '逃跑', next: 'escape_chance' },
+            { text: '躲起来', next: 'hide_home' }
+        ]
+    },
+    'keep_explain': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '警察', text: '【电话】小姐，冷静点。我们派心理医生过去。' },
+            { speaker: '我', text: '（他们完全不相信我...）' }
+        ],
+        choices: [
+            { text: '放弃', next: 'hang_up' },
+            { text: '自己解决', next: 'self_plan' }
+        ]
+    },
+
+
+    'call_110': {
+        bg: 'bg-home',
+        dialogues: [
+            { speaker: '我', text: '（我拨打了 110...）' },
+            { speaker: '警察', text: '【电话】您好，请问有什么紧急情况？' },
+            { speaker: '我', text: '（我该怎么说？他们会相信伪人的存在吗？）' }
+        ],
+        choices: [
+            { text: '说实话', next: 'police_truth' },
+            { text: '编个理由', next: 'police_lie' }
+        ]
+    },
+    'escape_office_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我逃出了办公室！）' },
+            { speaker: '我', text: '（张明在后面追...）' }
+        ],
+        choices: [
+            { text: '躲进人群', next: 'hide_crowd' },
+            { text: '联系猎人', next: 'contact_hunter' }
+        ]
+    },
+    'escape_zhang_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我从张明那里逃跑了！）' },
+            { speaker: '张明', text: '你逃不掉的...' }
+        ],
+        choices: [
+            { text: '甩掉他', next: 'shake_off' },
+            { text: '反击', next: 'fight_back' }
+        ]
+    },
+    'hand_to_hand': {
+        bg: 'bg-ending',
+        dialogues: [
+            { speaker: '我', text: '（我徒手与伪人搏斗...）' },
+            { speaker: '我', text: '（但力量悬殊太大...）' }
+        ],
+        ending: true, endingType: 'bad', endingTitle: '【结局：肉搏】',
+        endingText: '你试图徒手对抗伪人，但人类的力量无法与伪人抗衡。你被制服，带往大本营。'
+    },
+    'solo_action_2': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我决定独自行动...）' }
+        ],
+        choices: [
+            { text: '成功', next: 'ending_hide' },
+            { text: '失败', next: 'ending_captured' }
+        ]
+    },
+    'solo_action_3': {
+        bg: 'bg-street',
+        dialogues: [
+            { speaker: '我', text: '（我自己行动...）' }
+        ],
+        choices: [
+            { text: '成功', next: 'ending_survivor' },
+            { text: '失败', next: 'ending_captured' }
+        ]
+    },
 function showEnding(scene) {
     document.getElementById('dialogue-box').style.display = 'none';
     document.getElementById('choices-container').style.display = 'none';
